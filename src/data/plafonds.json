@@ -1,0 +1,7 @@
+[
+  { "departement": "60", "nom": "Oise", "plafond": 40 },
+  { "departement": "75", "nom": "Paris", "plafond": 45 },
+  { "departement": "77", "nom": "Seine-et-Marne", "plafond": 38 },
+  { "departement": "93", "nom": "Seine-Saint-Denis", "plafond": 35 },
+  { "departement": "95", "nom": "Val-d'Oise", "plafond": 38 }
+]

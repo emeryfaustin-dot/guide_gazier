@@ -1,0 +1,22 @@
+/* Tailwind CSS : une seule ligne suffit pour l'activer (version 4). */
+@import "tailwindcss";
+
+/* La page occupe toute la hauteur de l'écran (utile sur mobile). */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #1f2937; /* gris très foncé : bon contraste sur fond blanc */
+  background: #f9fafb;
+}
+
+/* Contour bien visible quand on navigue au clavier (accessibilité). */
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}

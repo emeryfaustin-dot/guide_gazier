@@ -1,0 +1,14 @@
+[
+  { "id": "a1", "restaurantId": 1, "auteurId": "demo-julie", "prenom": "Julie", "note": 5, "commentaire": "Accueil très sympa, plat du jour copieux. Parking facile pour le camion.", "creeLe": "2026-09-12T12:40:00Z" },
+  { "id": "a2", "restaurantId": 1, "auteurId": "demo-karim", "prenom": "Karim", "note": 4, "commentaire": "Bon rapport qualité-prix, service rapide le midi.", "creeLe": "2026-09-30T13:05:00Z" },
+  { "id": "a3", "restaurantId": 2, "auteurId": "demo-julie", "prenom": "Julie", "note": 4, "commentaire": "Sushis frais, idéal quand on est pressé.", "creeLe": "2026-08-21T12:15:00Z" },
+  { "id": "a4", "restaurantId": 3, "auteurId": "demo-marc", "prenom": "Marc", "note": 5, "commentaire": "Excellent, à réserver pour les jours de réunion. Reste sous le plafond avec la formule midi.", "creeLe": "2026-07-04T12:30:00Z" },
+  { "id": "a5", "restaurantId": 4, "auteurId": "demo-karim", "prenom": "Karim", "note": 3, "commentaire": "Correct pour manger vite, sans plus.", "creeLe": "2026-09-02T11:55:00Z" },
+  { "id": "a6", "restaurantId": 5, "auteurId": "demo-marc", "prenom": "Marc", "note": 5, "commentaire": "Superbe mais au-dessus du plafond de l'Oise.", "creeLe": "2026-06-18T12:45:00Z" },
+  { "id": "a7", "restaurantId": 6, "auteurId": "demo-julie", "prenom": "Julie", "note": 5, "commentaire": "La morue est top, ambiance familiale. Mon préféré vers Villemomble.", "creeLe": "2026-10-01T12:20:00Z" },
+  { "id": "a8", "restaurantId": 6, "auteurId": "demo-marc", "prenom": "Marc", "note": 4, "commentaire": "Très bon, un peu d'attente le vendredi.", "creeLe": "2026-10-09T12:35:00Z" },
+  { "id": "a9", "restaurantId": 7, "auteurId": "demo-karim", "prenom": "Karim", "note": 4, "commentaire": "Pizzas au feu de bois, terrasse agréable.", "creeLe": "2026-09-15T12:10:00Z" },
+  { "id": "a10", "restaurantId": 8, "auteurId": "demo-julie", "prenom": "Julie", "note": 4, "commentaire": "Cuisine de bistrot soignée.", "creeLe": "2026-08-28T12:50:00Z" },
+  { "id": "a11", "restaurantId": 9, "auteurId": "demo-marc", "prenom": "Marc", "note": 4, "commentaire": "Bonnes pizzas à emporter près du marché.", "creeLe": "2026-09-08T12:00:00Z" },
+  { "id": "a12", "restaurantId": 10, "auteurId": "demo-karim", "prenom": "Karim", "note": 4, "commentaire": "Assiettes mezzés généreuses, rapide.", "creeLe": "2026-10-05T12:25:00Z" }
+]
