@@ -16,8 +16,8 @@ export default function Notification() {
     <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-20 z-[2000] flex justify-center px-4">
       {notification && (
         <p
-          className={`pointer-events-auto max-w-md rounded-lg px-4 py-3 text-center font-semibold shadow-lg ${
-            notification.type === 'erreur' ? 'bg-red-800 text-white' : 'bg-gray-900 text-white'
+          className={`pointer-events-auto max-w-md rounded-2xl px-4 py-3 text-center font-semibold shadow-lg ${
+            notification.type === 'erreur' ? 'bg-tomate-800 text-white' : 'bg-gray-900 text-white'
           }`}
         >
           {notification.texte}

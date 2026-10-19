@@ -5,7 +5,7 @@ export function EtoilesAffichage({ note }) {
   // On n'affiche une étoile pleine qu'à partir de x,5 « au-dessus » : 4,5 → 4 étoiles, 4,6 → 5.
   const arrondie = Math.min(5, Math.floor(note + 0.49))
   return (
-    <span className="text-amber-700" aria-label={`${note} sur 5`} role="img">
+    <span className="text-etoile" aria-label={`${note} sur 5`} role="img">
       {'★'.repeat(arrondie)}
       <span className="text-gray-300">{'★'.repeat(5 - arrondie)}</span>
     </span>
@@ -30,8 +30,8 @@ export function EtoilesSaisie({ valeur, onChange, nom = 'note' }) {
               className="peer sr-only"
             />
             <span
-              className={`flex h-11 w-11 items-center justify-center rounded-lg text-3xl peer-focus-visible:outline-3 peer-focus-visible:outline-blue-700 ${
-                n <= valeur ? 'text-amber-600' : 'text-gray-300'
+              className={`flex h-11 w-11 items-center justify-center rounded-lg text-3xl peer-focus-visible:outline-3 peer-focus-visible:outline-tomate-700 ${
+                n <= valeur ? 'text-etoile' : 'text-gray-300'
               }`}
               aria-hidden="true"
             >

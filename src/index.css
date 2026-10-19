@@ -1,6 +1,57 @@
 /* Tailwind CSS : une seule ligne suffit pour l'activer (version 4). */
 @import "tailwindcss";
 
+/*
+  Charte « bistrot de quartier » : toutes les couleurs et polices de l'app sont ici.
+  - On remplace le gris de Tailwind par un gris CHAUD (fond crème, texte presque noir).
+  - « tomate » = couleur d'action (boutons, liens).
+  - « ok » / « hors » = budget respecté / dépassé.
+  - Une couleur par type de cuisine (voir aussi src/config/cuisines.js).
+  Tous les couples texte / fond respectent le contraste AA (4,5:1).
+*/
+@theme {
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+
+  --color-gray-50: #f7f4ef;
+  --color-gray-100: #efeae2;
+  --color-gray-200: #e6e0d6;
+  --color-gray-300: #d6cec1;
+  --color-gray-400: #ada597;
+  --color-gray-500: #777166;
+  --color-gray-600: #5e5a52;
+  --color-gray-700: #4a463f;
+  --color-gray-800: #2e2b27;
+  --color-gray-900: #1b1a17;
+  --color-gray-950: #0f0e0c;
+
+  --color-tomate-50: #fdf1ee;
+  --color-tomate-100: #fbe0d9;
+  --color-tomate-200: #f6bfb2;
+  --color-tomate-300: #ef9784;
+  --color-tomate-400: #e66a51;
+  --color-tomate-500: #d8432a;
+  --color-tomate-600: #c23b22;
+  --color-tomate-700: #a8321c;
+  --color-tomate-800: #8a2916;
+  --color-tomate-900: #6e2112;
+  --color-tomate-950: #4a160c;
+
+  --color-ok-fond: #e4f0e8;
+  --color-ok: #245a3d;
+  --color-ok-vif: #2e7a4f;
+  --color-hors-fond: #fcebd9;
+  --color-hors: #8a4300;
+  --color-etoile: #e0a21b;
+
+  --color-cuisine-francais: #7a2638;
+  --color-cuisine-japonais: #23395b;
+  --color-cuisine-rapide: #e8a317;
+  --color-cuisine-portugais: #1d6f86;
+  --color-cuisine-italien: #2f7a4d;
+  --color-cuisine-autre: #5c4f86;
+}
+
 /* La page occupe toute la hauteur de l'écran (utile sur mobile). */
 html,
 body,
@@ -10,13 +61,55 @@ body,
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: #1f2937; /* gris très foncé : bon contraste sur fond blanc */
-  background: #f9fafb;
+  font-family: var(--font-sans);
+  color: var(--color-gray-900);
+  background: var(--color-gray-50);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Titres : police d'affichage, un peu resserrée. */
+h1,
+h2,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
 }
 
 /* Contour bien visible quand on navigue au clavier (accessibilité). */
 :focus-visible {
-  outline: 3px solid #1d4ed8;
+  outline: 3px solid var(--color-tomate-600);
   outline-offset: 2px;
+}
+
+/* Carte : tuiles OpenStreetMap un peu désaturées et réchauffées,
+   pour que les pins colorés ressortent. */
+.leaflet-tile-pane {
+  filter: saturate(0.55) sepia(0.12) brightness(1.03);
+}
+
+/* Bulles Leaflet : coins arrondis, ombre douce, police de l'app. */
+.leaflet-popup-content-wrapper {
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgb(40 30 20 / 0.18);
+  font-family: var(--font-sans);
+}
+.leaflet-popup-content {
+  margin: 14px 16px;
+}
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #efe9df;
+}
+
+/* Ombre portée des pins (dessinés en SVG). */
+.pin-resto {
+  filter: drop-shadow(0 4px 5px rgb(40 30 20 / 0.28));
+}
+
+/* Barre de puces défilable sans barre de défilement visible. */
+.sans-barre {
+  scrollbar-width: none;
+}
+.sans-barre::-webkit-scrollbar {
+  display: none;
 }

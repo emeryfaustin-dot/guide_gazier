@@ -27,7 +27,7 @@ Propriétaire / administrateur : Faustin (débutant en développement → expliq
   Un restaurant publié peut devenir « hors budget » si l'admin baisse le plafond.
 
 ## Fonctionnalités (toutes livrées)
-1. Carte Leaflet + OpenStreetMap, marqueurs ✓ / !, popup → « Voir la fiche ».
+1. Carte Leaflet + OpenStreetMap, pins colorés par cuisine (+ pastille « ! » si hors budget), popup → « Voir la fiche ».
 2. Recherche (nom, ville, cuisine ; sans accents, multi-mots).
 3. Filtres : cuisine, département, prix max, « dans le plafond », note minimale, favoris.
 4. Vue Liste (triée par note).
@@ -37,6 +37,14 @@ Propriétaire / administrateur : Faustin (débutant en développement → expliq
 8. Ajout : recherche Google Places (nom ou lien Google Maps) ou saisie manuelle + géocodage Nominatim.
 9. Contrôle du budget à l'ajout (refus si dépassé). Agent → proposition « en attente ». Admin → publié.
 10. Espace admin : valider/refuser les propositions, gérer les plafonds, retirer/supprimer des restaurants.
+
+## Charte visuelle (« bistrot de quartier »)
+- Couleurs et polices déclarées UNE fois dans `src/index.css` (`@theme` Tailwind) :
+  gris chaud (`gray-*` redéfini), `tomate-*` = actions, `ok` / `hors` = budget, `etoile`.
+- Polices : **Bricolage Grotesque** (titres, classe `font-display`) + **Figtree** (texte), chargées dans `index.html`.
+- Chaque cuisine a une couleur + un pictogramme : `STYLES_CUISINES` dans `src/config/cuisines.js`
+  (utilisé par les pins, la liste, la fiche, la légende). Nouvelle cuisine → l'ajouter là.
+- Icônes : composant `src/ui/Icone.jsx` (SVG au trait). **Pas d'emoji** dans l'interface.
 
 ## Stack technique
 - **React 19 + Vite 8**, **Tailwind CSS v4** (`@tailwindcss/vite`, import unique dans `src/index.css`)

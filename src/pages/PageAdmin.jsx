@@ -43,7 +43,7 @@ export default function PageAdmin() {
             aria-controls={`panneau-${o.id}`}
             onClick={() => setOnglet(o.id)}
             className={`min-h-11 shrink-0 border-b-4 px-4 font-semibold ${
-              onglet === o.id ? 'border-blue-800 text-blue-900' : 'border-transparent text-gray-700'
+              onglet === o.id ? 'border-tomate-800 text-tomate-900' : 'border-transparent text-gray-700'
             }`}
           >
             {o.texte}

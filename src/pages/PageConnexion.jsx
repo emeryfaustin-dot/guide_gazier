@@ -3,6 +3,8 @@ import { useDonnees } from '../contexte/DonneesContexte.jsx'
 import Message from '../ui/Message.jsx'
 import { aller } from '../hooks/useRoute.js'
 import { bouton, champ, etiquette } from '../ui/styles.js'
+import { CUISINES } from '../config/cuisines.js'
+import { VignetteCuisine } from '../ui/Icone.jsx'
 
 // Page de connexion.
 // - Avec Supabase : on saisit son email, on reçoit un "lien magique" (pas de mot de passe à retenir).
@@ -28,14 +30,19 @@ export default function PageConnexion() {
   }
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-blue-800 p-4">
-      <div className="w-full max-w-sm space-y-5 rounded-2xl bg-white p-6 shadow-xl">
-        <div className="text-center">
-          <p className="text-4xl" aria-hidden="true">
-            🍽️
-          </p>
-          <h1 className="text-2xl font-bold text-gray-900">Guide du gazier</h1>
-          <p className="text-gray-700">Les bonnes adresses validées par les collègues</p>
+    <main className="flex min-h-dvh items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-sm space-y-5 rounded-3xl bg-white p-6 shadow-[0_12px_40px_rgb(40_30_20/0.12)]">
+        <div className="space-y-3 text-center">
+          {/* Les 6 couleurs de cuisine, en clin d'œil aux pins de la carte */}
+          <div className="flex justify-center gap-1.5" aria-hidden="true">
+            {CUISINES.map((c) => (
+              <VignetteCuisine key={c} cuisine={c} taille={34} arrondi={11} />
+            ))}
+          </div>
+          <h1 className="text-3xl leading-tight font-extrabold text-gray-900">
+            Guide du <span className="text-tomate-600">gazier</span>
+          </h1>
+          <p className="text-gray-600">Les bonnes adresses validées par les collègues</p>
         </div>
 
         {etat.lienEnvoye ? (
@@ -85,7 +92,7 @@ export default function PageConnexion() {
 
             {demo && (
               <label className="flex min-h-11 cursor-pointer items-center gap-3">
-                <input type="checkbox" checked={admin} onChange={(e) => setAdmin(e.target.checked)} className="h-5 w-5 accent-blue-800" />
+                <input type="checkbox" checked={admin} onChange={(e) => setAdmin(e.target.checked)} className="h-5 w-5 accent-tomate-800" />
                 Me connecter en administrateur (démo)
               </label>
             )}

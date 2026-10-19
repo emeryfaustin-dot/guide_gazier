@@ -12,7 +12,7 @@ export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
   const versNombre = (v) => (v === '' ? null : Number(v))
 
   return (
-    <div id="panneau-filtres" className="mx-auto mt-3 max-w-5xl space-y-3 rounded-lg bg-gray-50 p-3">
+    <div id="panneau-filtres" className="mx-auto mt-3 max-w-5xl space-y-3 rounded-3xl bg-white p-4 shadow-[0_8px_24px_rgb(40_30_20/0.10)]">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <ChampSelect
           libelle="Type de cuisine"
@@ -75,7 +75,7 @@ export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
 function CaseACocher({ libelle, coche, onChange }) {
   return (
     <label className="flex min-h-11 cursor-pointer items-center gap-3 text-gray-900">
-      <input type="checkbox" checked={coche} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-blue-800" />
+      <input type="checkbox" checked={coche} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-tomate-800" />
       {libelle}
     </label>
   )

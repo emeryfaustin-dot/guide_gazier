@@ -73,7 +73,7 @@ export default function RechercheGoogle({ onChoisir, onManuel }) {
               <button
                 type="button"
                 onClick={() => onChoisir(r)}
-                className="w-full rounded-xl border border-gray-300 bg-white p-3 text-left hover:border-blue-500 hover:bg-blue-50"
+                className="w-full rounded-xl border border-gray-300 bg-white p-3 text-left hover:border-tomate-500 hover:bg-tomate-50"
               >
                 <span className="block font-bold text-gray-900">{r.nom}</span>
                 <span className="block text-gray-700">{r.adresseComplete}</span>

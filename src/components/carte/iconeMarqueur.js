@@ -1,29 +1,45 @@
 import L from 'leaflet'
+import { styleCuisine } from '../../config/cuisines.js'
 
-// On dessine nos propres marqueurs en SVG plutôt que d'utiliser l'image
-// par défaut de Leaflet (qui s'affiche mal avec Vite et ne permet pas
-// de distinguer les restaurants validés de ceux hors budget).
+// On dessine nos propres pins en SVG (l'image par défaut de Leaflet s'affiche mal avec Vite).
 //
-// Accessibilité : la différence ne repose pas que sur la couleur.
-// Validé = vert + coche ✓ ; hors budget = orange + point d'exclamation !
+// Chaque pin = une bulle arrondie AUX COULEURS DE LA CUISINE + son pictogramme
+// (verre de vin, bol, burger, sardine, pizza, couverts).
+// Hors budget = même pin + une pastille « ! » orange en haut à droite :
+// l'info ne repose donc pas uniquement sur la couleur (accessibilité).
 
-function creerIcone(couleur, symbole) {
+function creerIcone(cuisine, horsBudget) {
+  const style = styleCuisine(cuisine)
+  const traits = style.traits.map((d) => `<path d="${d}"/>`).join('')
+  const pastille = horsBudget
+    ? `<circle cx="35" cy="6" r="6" fill="#fff4e6" stroke="#8a4300" stroke-width="1.6"/>
+       <path d="M35 3v3.4M35 8.6v.1" stroke="#8a4300" stroke-width="1.8" stroke-linecap="round"/>`
+    : ''
+
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="46" viewBox="0 0 36 46" aria-hidden="true">
-      <path d="M18 1C8.6 1 1 8.6 1 18c0 12.4 17 27 17 27s17-14.6 17-27C35 8.6 27.4 1 18 1z"
-            fill="${couleur}" stroke="#ffffff" stroke-width="2"/>
-      <text x="18" y="24" text-anchor="middle" font-size="16" font-weight="700"
-            font-family="system-ui, sans-serif" fill="#ffffff">${symbole}</text>
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48" aria-hidden="true" class="pin-resto">
+      <path d="M14 38 L20 46 L26 38 Z" fill="${style.couleur}"/>
+      <rect x="2" y="2" width="36" height="36" rx="13" fill="${style.couleur}" stroke="#ffffff" stroke-width="2.5"/>
+      <g transform="translate(10 10) scale(0.833)" fill="none" stroke="${style.encre}" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round">${traits}</g>
+      ${pastille}
     </svg>`
 
   return L.divIcon({
     html: svg,
     className: '', // retire le style par défaut (carré blanc) de Leaflet
-    iconSize: [36, 46],
-    iconAnchor: [18, 45], // la pointe du marqueur touche l'emplacement exact
-    popupAnchor: [0, -40], // la fiche s'ouvre au-dessus du marqueur
+    iconSize: [40, 48],
+    iconAnchor: [20, 46], // la pointe du pin touche l'emplacement exact
+    popupAnchor: [0, -44], // la fiche s'ouvre au-dessus du pin
   })
 }
 
-export const iconeValide = creerIcone('#15803d', '✓') // vert foncé
-export const iconeHorsBudget = creerIcone('#b45309', '!') // orange foncé
+// On garde les icônes déjà créées en mémoire : une seule icône par combinaison
+// (cuisine × budget), au lieu d'en recréer une à chaque affichage.
+const cache = new Map()
+
+export function iconePour(cuisine, horsBudget) {
+  const cle = `${cuisine}|${horsBudget}`
+  if (!cache.has(cle)) cache.set(cle, creerIcone(cuisine, horsBudget))
+  return cache.get(cle)
+}
