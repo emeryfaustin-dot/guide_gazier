@@ -46,11 +46,6 @@ const prevenir = (u) => ecouteurs.forEach((cb) => cb(u))
 
 const nouvelId = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()))
 
-// Simule la sécurité de la base : seules certaines actions sont permises à un non-admin.
-function exigerAdmin(utilisateur) {
-  if (utilisateur?.role !== 'admin') throw new Error('Action réservée à l’administrateur.')
-}
-
 export const serviceDemo = {
   mode: 'demo',
 
@@ -63,9 +58,9 @@ export const serviceDemo = {
     return () => (ecouteurs = ecouteurs.filter((cb) => cb !== callback))
   },
 
-  // En démo : connexion immédiate, sans email. La case "admin" permet de tester l'espace admin.
-  async connexion({ email, prenom, admin = false }) {
-    const utilisateur = { id: `demo-${email.toLowerCase()}`, email, prenom, role: admin ? 'admin' : 'agent' }
+  // En démo, chaque collègue entre avec son adresse email.
+  async connexion({ email }) {
+    const utilisateur = { id: `demo-${email.toLowerCase()}`, email, prenom: '' }
     ecrire(CLE_UTILISATEUR, utilisateur)
     prevenir(utilisateur)
     return { lienEnvoye: false }
@@ -93,13 +88,9 @@ export const serviceDemo = {
     return null
   },
 
-  async chargerTout(utilisateur) {
-    // Comme les règles RLS : un agent voit les restaurants validés + ses propres propositions.
-    const visibles = base.restaurants.filter(
-      (r) => r.statut === 'valide' || utilisateur?.role === 'admin' || r.proposePar === utilisateur?.id,
-    )
+  async chargerTout(_utilisateur) {
     return {
-      restaurants: structuredClone(visibles),
+      restaurants: structuredClone(base.restaurants),
       plafonds: structuredClone(base.plafonds),
       avis: structuredClone(base.avis).sort((a, b) => b.creeLe.localeCompare(a.creeLe)),
       favoris: new Set(utilisateur ? (base.favoris[utilisateur.id] ?? []) : []),
@@ -135,7 +126,7 @@ export const serviceDemo = {
   async supprimerAvis(utilisateur, avisId) {
     const avis = base.avis.find((a) => a.id === avisId)
     if (!avis) return
-    if (avis.auteurId !== utilisateur.id && utilisateur.role !== 'admin') throw new Error('Tu ne peux supprimer que tes propres avis.')
+    if (avis.auteurId !== utilisateur.id) throw new Error('Tu ne peux supprimer que tes propres avis.')
     base.avis = base.avis.filter((a) => a.id !== avisId)
     sauver()
   },
@@ -148,7 +139,7 @@ export const serviceDemo = {
     const nouveau = {
       ...r,
       id: Math.max(0, ...base.restaurants.map((x) => Number(x.id) || 0)) + 1,
-      statut: utilisateur.role === 'admin' ? 'valide' : 'en_attente',
+      statut: 'en_attente',
       proposePar: utilisateur.id,
       creeLe: new Date().toISOString(),
     }
@@ -157,22 +148,19 @@ export const serviceDemo = {
     return nouveau
   },
 
-  async changerStatutRestaurant(utilisateur, id, statut) {
-    exigerAdmin(utilisateur)
+  async changerStatutRestaurant(_utilisateur, id, statut) {
     const r = base.restaurants.find((x) => x.id === id)
     if (r) r.statut = statut
     sauver()
   },
 
-  async supprimerRestaurant(utilisateur, id) {
-    exigerAdmin(utilisateur)
+  async supprimerRestaurant(_utilisateur, id) {
     base.restaurants = base.restaurants.filter((x) => x.id !== id)
     base.avis = base.avis.filter((a) => a.restaurantId !== id)
     sauver()
   },
 
-  async enregistrerPlafond(utilisateur, { departement, nom, plafond }) {
-    exigerAdmin(utilisateur)
+  async enregistrerPlafond(_utilisateur, { departement, nom, plafond }) {
     const existant = base.plafonds.find((p) => p.departement === departement)
     if (existant) Object.assign(existant, { nom, plafond })
     else base.plafonds.push({ departement, nom, plafond })
@@ -180,8 +168,7 @@ export const serviceDemo = {
     sauver()
   },
 
-  async supprimerPlafond(utilisateur, departement) {
-    exigerAdmin(utilisateur)
+  async supprimerPlafond(_utilisateur, departement) {
     base.plafonds = base.plafonds.filter((p) => p.departement !== departement)
     sauver()
   },

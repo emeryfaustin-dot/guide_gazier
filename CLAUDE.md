@@ -8,23 +8,23 @@ Application web **interne GRTgaz** : un « guide Michelin » des restaurants val
 par les collègues. Les agents (gaziers) déjeunent souvent au restaurant en
 déplacement ; l'app leur permet de trouver vite les bonnes adresses, **sur une carte**.
 
-Utilisateur principal : agent sur le terrain, **sur téléphone** → conception mobile-first.
-Propriétaire / administrateur : Faustin (débutant en développement → expliquer simplement).
+Utilisateur principal : collègue sur le terrain, **sur téléphone** → conception mobile-first.
+Propriétaire : Faustin (débutant en développement → expliquer simplement).
 
 ## Règle métier principale
 - Chaque département a un **plafond de budget par personne** (ex. Oise = 40 €).
 - Un restaurant est **« dans le budget »** si son prix moyen ≤ plafond de son département.
 - Département sans plafond → **non validé** (par prudence).
 - Plafonds dans une **table de configuration** (`plafonds` dans Supabase, `src/data/plafonds.json` en démo),
-  modifiables depuis l'espace admin, **jamais codés en dur**.
+  modifiables par tout collègue connecté depuis les réglages, **jamais codés en dur**.
 - Logique centralisée dans `src/utils/budget.js` (`trouverPlafond`, `estDansLeBudget`, `verifierBudget`).
 - Contrôle **aussi côté base** : le trigger SQL `controler_budget` refuse un ajout hors budget.
 
 ## Deux concepts à ne pas confondre
-- **Statut** d'un restaurant (décidé par l'admin) : `en_attente` → `valide` (publié) ou `refuse`.
+- **Statut** d'un restaurant (décidé collectivement) : `en_attente` → `valide` (publié) ou `refuse`.
   Seuls les `valide` apparaissent sur la carte et la liste.
 - **Budget** (calculé en direct) : badge « ✓ Dans le budget » / « ! Hors budget ».
-  Un restaurant publié peut devenir « hors budget » si l'admin baisse le plafond.
+  Un restaurant publié peut devenir « hors budget » si un collègue baisse le plafond.
 
 ## Fonctionnalités (toutes livrées)
 1. Carte Leaflet + OpenStreetMap, pins colorés par cuisine (+ pastille « ! » si hors budget), popup → « Voir la fiche ».
@@ -35,8 +35,9 @@ Propriétaire / administrateur : Faustin (débutant en développement → expliq
 6. Favoris par collègue.
 7. Avis 1–5 + commentaire (prénom + date), un par personne et par restaurant, modifiable / supprimable.
 8. Ajout : recherche Google Places (nom ou lien Google Maps) ou saisie manuelle + géocodage Nominatim.
-9. Contrôle du budget à l'ajout (refus si dépassé). Agent → proposition « en attente ». Admin → publié.
-10. Espace admin : valider/refuser les propositions, gérer les plafonds, retirer/supprimer des restaurants.
+9. Contrôle du budget à l'ajout (refus si dépassé). Chaque ajout est proposé « en attente », puis validé collectivement.
+10. Réglages partagés : valider/refuser les propositions, gérer les plafonds, retirer/supprimer des restaurants.
+11. Roulette : tirage au sort d'un restaurant publié dans le rayon GPS choisi.
 
 ## Charte visuelle (« bistrot de quartier »)
 - Couleurs et polices déclarées UNE fois dans `src/index.css` (`@theme` Tailwind) :
@@ -57,7 +58,7 @@ Propriétaire / administrateur : Faustin (débutant en développement → expliq
 
 ## Mode démo
 Si `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` sont absents, l'app utilise `serviceDemo.js`
-(localStorage, données de `src/data/`). Connexion sans email, case « administrateur (démo) ».
+(localStorage, données de `src/data/`). En démo, connexion avec une adresse email.
 Les deux services (`serviceSupabase.js`, `serviceDemo.js`) exposent **exactement les mêmes fonctions** :
 toute nouvelle fonction doit être ajoutée aux deux.
 
@@ -69,6 +70,7 @@ api/                         # fonctions serveur (Vercel) — clé Google ici se
   details-restaurant.js      # téléphone, horaires, site, photo (relus en direct)
 supabase/
   schema.sql                 # tables, triggers, règles RLS
+  migrations/                # évolutions pour une base déjà installée
   donnees-initiales.sql      # plafonds + 10 restaurants d'exemple
 docs/MISE-EN-PRODUCTION.md   # Supabase, Google (clé + coûts), GitHub, Vercel
 tests/regles.test.js         # tests des règles métier (npm test)
@@ -81,17 +83,17 @@ src/
   lib/supabase.js            # client Supabase (ou null en démo)
   services/donnees.js        # choisit Supabase ou démo
   services/serviceSupabase.js, serviceDemo.js, places.js, geocodage.js
-  utils/budget.js, filtres.js, notes.js, departement.js   # logique pure, testée
+  utils/budget.js, filtres.js, notes.js, departement.js, geolocalisation.js # logique pure, testée
   ui/                        # petits composants génériques + styles.js
   components/carte|recherche|liste|fiche|ajout|admin|layout/
-  pages/                     # VueRestaurants, PageAjout, PageAdmin, PageProfil, PageConnexion
+  pages/                     # VueRestaurants, PageAjout, PageRoulette, réglages, PageProfil, PageConnexion
 ```
 
 ## Modèle de données (côté app, camelCase)
 - Restaurant : `id, nom, adresse, ville, codePostal, departement, cuisine, prixMoyen, telephone, horaires,
   siteWeb, lat, lng, placeId, statut, proposePar, creeLe` (base en snake_case, conversion dans serviceSupabase)
 - Avis : `id, restaurantId, auteurId, prenom, note, commentaire, creeLe, modifieLe`
-- Plafond : `departement, nom, plafond` · Favoris : Set d'ids · Profil : `id, email, prenom, role`
+- Plafond : `departement, nom, plafond` · Favoris : Set d'ids · Profil : `id, email, prenom`
 
 ## Règles de code
 - Code et commentaires **en français**, commentaires simples.
@@ -107,7 +109,7 @@ src/
 - `VITE_*` = visible dans le navigateur → seulement Supabase URL + clé anon (protégées par RLS).
 - `GOOGLE_PLACES_API_KEY` **sans** `VITE_` → lue uniquement par `api/`, jamais envoyée au navigateur.
 - `api/` vérifie le jeton Supabase de l'utilisateur avant d'appeler Google.
-- Rôle admin : uniquement via SQL ; la colonne `role` n'est pas modifiable par les utilisateurs.
+- Tous les comptes connectés partagent la gestion des propositions, des restaurants et des plafonds.
 - Option : table `domaines_autorises` pour réserver l'inscription aux emails `grtgaz.com`.
 
 ## Google Places — conditions d'utilisation
@@ -122,11 +124,12 @@ src/
 - [x] Phase 4 : Supabase (schéma + RLS) + authentification par email
 - [x] Phase 5 : favoris, commentaires et notes
 - [x] Phase 6 : ajout via Google Places + saisie manuelle + contrôle du budget
-- [x] Phase 7 : espace admin, tests, guide de déploiement Vercel
+- [x] Phase 7 : réglages partagés, tests, guide de déploiement Vercel
+- [x] Phase 8 : roulette géolocalisée et suppression du rôle administrateur
 
 ## Pistes d'amélioration
-- Bouton admin « Rafraîchir depuis Google » (adresse/coordonnées des restaurants avec place_id).
-- Modifier un restaurant (prix, cuisine) depuis l'admin.
+- Bouton « Rafraîchir depuis Google » dans les réglages (adresse/coordonnées des restaurants avec place_id).
+- Modifier un restaurant (prix, cuisine) depuis les réglages partagés.
 - Regroupement des marqueurs proches (leaflet.markercluster) quand il y aura beaucoup de restaurants.
 - « Autour de moi » (géolocalisation du téléphone) et tri par distance.
 - Mode hors-ligne / PWA installable.

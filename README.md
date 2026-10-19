@@ -10,7 +10,7 @@ npm run dev     # lance l'application
 ```
 
 Ouvre http://localhost:5173. Sans fichier `.env`, l'app tourne en **mode démo** : les données
-restent dans ton navigateur, et tu peux te connecter en « administrateur (démo) ».
+restent dans ton navigateur et tu peux entrer avec ton adresse email.
 
 ## Passer en vrai (Supabase, Google, Vercel)
 

@@ -20,7 +20,6 @@ create table if not exists public.profils (
   id      uuid primary key references auth.users (id) on delete cascade,
   email   text not null,
   prenom  text not null default '',
-  role    text not null default 'agent' check (role in ('agent', 'admin')),
   cree_le timestamptz not null default now()
 );
 
@@ -86,16 +85,6 @@ create table if not exists public.domaines_autorises (
 -- 2. FONCTIONS ET TRIGGERS
 -- ---------------------------------------------------------------------
 
--- L'utilisateur connecté est-il administrateur ?
--- "security definer" : la fonction lit la table profils avec les droits
--- du propriétaire, ce qui évite une boucle dans les règles RLS.
-create or replace function public.est_admin()
-returns boolean
-language sql stable security definer set search_path = public
-as $$
-  select exists (select 1 from public.profils where id = auth.uid() and role = 'admin');
-$$;
-
 -- À la création d'un compte : vérifie le domaine email et crée le profil.
 create or replace function public.creer_profil()
 returns trigger
@@ -144,14 +133,13 @@ create trigger avant_ajout_restaurant
   before insert on public.restaurants
   for each row execute function public.controler_budget();
 
--- Un non-admin ne peut proposer qu'un restaurant "en attente", à son nom.
+-- Chaque collègue propose un restaurant en attente, à son nom.
 create or replace function public.forcer_statut_proposition()
 returns trigger
 language plpgsql
 as $$
 begin
-  -- auth.uid() est vide quand on exécute du SQL depuis le tableau de bord : on laisse passer.
-  if auth.uid() is not null and not public.est_admin() then
+  if auth.uid() is not null then
     new.statut := 'en_attente';
     new.propose_par := auth.uid();
   end if;
@@ -216,45 +204,45 @@ alter table public.favoris            enable row level security;
 alter table public.avis               enable row level security;
 alter table public.domaines_autorises enable row level security;
 
--- PROFILS : chacun voit le sien (l'admin voit tout) et ne peut modifier QUE son prénom.
+-- PROFILS : chacun voit et modifie uniquement son prénom.
 drop policy if exists "profil lisible" on public.profils;
 create policy "profil lisible" on public.profils
-  for select to authenticated using (id = auth.uid() or public.est_admin());
+  for select to authenticated using (id = auth.uid());
 
 drop policy if exists "profil modifiable" on public.profils;
 create policy "profil modifiable" on public.profils
   for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
 
--- Droits par colonne : impossible de s'auto-promouvoir admin.
+-- Le profil ne peut modifier que son prénom.
 revoke update on public.profils from authenticated;
 grant update (prenom) on public.profils to authenticated;
 
--- PLAFONDS : lecture pour tous les connectés, écriture admin.
+-- PLAFONDS : lecture et configuration partagées par les collègues connectés.
 drop policy if exists "plafonds lisibles" on public.plafonds;
-create policy "plafonds lisibles" on public.plafonds
-  for select to authenticated using (true);
-
 drop policy if exists "plafonds admin" on public.plafonds;
-create policy "plafonds admin" on public.plafonds
-  for all to authenticated using (public.est_admin()) with check (public.est_admin());
+drop policy if exists "plafonds partages" on public.plafonds;
+create policy "plafonds partages" on public.plafonds
+  for all to authenticated using (true) with check (true);
 
--- RESTAURANTS : on voit les validés + ses propres propositions ; l'admin voit tout.
+-- RESTAURANTS : tout collègue connecté peut consulter et gérer la publication.
 drop policy if exists "restaurants lisibles" on public.restaurants;
 create policy "restaurants lisibles" on public.restaurants
   for select to authenticated
-  using (statut = 'valide' or propose_par = auth.uid() or public.est_admin());
+  using (true);
 
 drop policy if exists "restaurants proposables" on public.restaurants;
 create policy "restaurants proposables" on public.restaurants
   for insert to authenticated with check (true); -- statut forcé par trigger
 
 drop policy if exists "restaurants admin modif" on public.restaurants;
-create policy "restaurants admin modif" on public.restaurants
-  for update to authenticated using (public.est_admin()) with check (public.est_admin());
+drop policy if exists "restaurants modifiables collegial" on public.restaurants;
+create policy "restaurants modifiables collegial" on public.restaurants
+  for update to authenticated using (true) with check (true);
 
 drop policy if exists "restaurants admin suppr" on public.restaurants;
-create policy "restaurants admin suppr" on public.restaurants
-  for delete to authenticated using (public.est_admin());
+drop policy if exists "restaurants supprimables collegial" on public.restaurants;
+create policy "restaurants supprimables collegial" on public.restaurants
+  for delete to authenticated using (true);
 
 -- FAVORIS : chacun ne gère que les siens.
 drop policy if exists "favoris perso" on public.favoris;
@@ -262,8 +250,7 @@ create policy "favoris perso" on public.favoris
   for all to authenticated
   using (utilisateur_id = auth.uid()) with check (utilisateur_id = auth.uid());
 
--- AVIS : lisibles par tous les connectés ; chacun écrit / modifie / supprime les siens.
--- L'admin peut aussi supprimer un avis (modération).
+-- AVIS : lisibles par tous les connectés ; chacun écrit, modifie et supprime les siens.
 drop policy if exists "avis lisibles" on public.avis;
 create policy "avis lisibles" on public.avis
   for select to authenticated using (true);
@@ -278,6 +265,6 @@ create policy "avis modif" on public.avis
 
 drop policy if exists "avis suppr" on public.avis;
 create policy "avis suppr" on public.avis
-  for delete to authenticated using (auteur_id = auth.uid() or public.est_admin());
+  for delete to authenticated using (auteur_id = auth.uid());
 
 -- DOMAINES AUTORISÉS : gérés uniquement depuis le tableau de bord Supabase (aucune règle = aucun accès depuis l'app).

@@ -19,7 +19,7 @@ Ordre conseillé : **1. Supabase → 2. Google Places → 3. GitHub → 4. Verce
 1. Menu de gauche → **SQL Editor** → **New query**.
 2. Copie-colle **tout** le fichier `supabase/schema.sql` → **Run**. Tu dois voir « Success ».
 3. Nouvelle requête : copie-colle `supabase/donnees-initiales.sql` → **Run**
-   (plafonds + 10 restaurants d'exemple ; tu pourras les supprimer depuis l'espace admin).
+   (plafonds + 10 restaurants d'exemple ; tu pourras les supprimer depuis les réglages partagés).
 
 ### Brancher l'app
 1. **Project Settings** (roue crantée) → **API**.
@@ -32,8 +32,8 @@ Ordre conseillé : **1. Supabase → 2. Google Places → 3. GitHub → 4. Verce
 4. Relance `npm run dev` : le badge **DÉMO** disparaît.
 
 > La clé « anon » est publique par nature (elle part dans le navigateur). Ce qui protège les données,
-> ce sont les **règles RLS** du fichier `schema.sql` : un agent ne peut pas modifier les plafonds,
-> publier un restaurant, ni toucher aux avis des autres — même en bidouillant le navigateur.
+> ce sont les **règles RLS** du fichier `schema.sql` : seuls les comptes connectés peuvent modifier
+> les réglages partagés, et chacun ne peut modifier que ses propres avis.
 
 ### Régler la connexion par email
 1. **Authentication** → **URL Configuration** :
@@ -45,13 +45,11 @@ Ordre conseillé : **1. Supabase → 2. Google Places → 3. GitHub → 4. Verce
    Pour l'usage réel avec les collègues, branche un fournisseur SMTP
    (Authentication → Emails → SMTP Settings ; ex. Brevo ou Resend, gratuits pour un petit volume).
 
-### Devenir administrateur
-1. Connecte-toi une première fois dans l'app (ça crée ton profil).
-2. SQL Editor :
-   ```sql
-   update public.profils set role = 'admin' where email = 'ton.email@grtgaz.com';
-   ```
-3. Déconnecte-toi / reconnecte-toi : l'onglet **Admin** apparaît.
+### Mettre à jour une base déjà installée
+Après le déploiement de la nouvelle version, ouvre **SQL Editor** et exécute le fichier
+`supabase/migrations/20261019_acces_partage.sql`. Il supprime le rôle administrateur et permet
+à tout compte connecté de modifier les réglages et le statut des restaurants. Chaque ajout reste
+en attente jusqu'à sa validation par un collègue.
 
 ### (Recommandé) Réserver l'app aux emails GRTgaz
 ```sql
@@ -101,7 +99,7 @@ Ce que tu dois régler toi-même dans Google Cloud :
 - On ne copie **pas** téléphone, horaires, site ni photo : ils sont relus en direct à l'ouverture de la fiche.
 - Nom, adresse et coordonnées GPS sont gardés pour la carte et le contrôle du budget.
   Les règles Google limitent la conservation des coordonnées (30 jours au moment où ce guide est écrit) :
-  piste d'amélioration, un bouton admin « rafraîchir depuis Google ».
+   piste d'amélioration, un bouton dans les réglages « rafraîchir depuis Google ».
 - La mention « Infos fournies par Google » et l'auteur de la photo sont affichés.
 
 ---
@@ -142,8 +140,8 @@ Ce que tu dois régler toi-même dans Google Cloud :
 
 - [ ] `npm test` : tous les tests passent
 - [ ] Connexion par email OK (lien reçu, connexion sur le même appareil)
-- [ ] Un collègue « agent » ne voit pas l'onglet Admin
-- [ ] Une proposition d'agent apparaît dans Admin → Propositions, puis sur la carte après validation
+- [ ] Tout collègue connecté peut ouvrir les Réglages et modifier les plafonds
+- [ ] Une proposition apparaît dans Réglages → Propositions, puis sur la carte après validation collective
 - [ ] Un restaurant au-dessus du plafond est refusé à l'ajout
 - [ ] Modifier un plafond change immédiatement les badges sur la carte
 - [ ] La recherche Google fonctionne, et la saisie manuelle prend le relais si Google est coupé

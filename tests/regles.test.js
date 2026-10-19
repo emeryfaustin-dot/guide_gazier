@@ -7,6 +7,7 @@ import { estDansLeBudget, trouverPlafond, verifierBudget } from '../src/utils/bu
 import { departementDepuisCodePostal } from '../src/utils/departement.js'
 import { filtrerRestaurants, normaliser, compterFiltresActifs, FILTRES_PAR_DEFAUT } from '../src/utils/filtres.js'
 import { statistiquesNotes, formaterNote } from '../src/utils/notes.js'
+import { distanceKm, restaurantsDansLeRayon } from '../src/utils/geolocalisation.js'
 import { analyserAdresse } from '../api/rechercher-restaurant.js'
 
 const plafonds = [
@@ -111,6 +112,32 @@ describe('Notes', () => {
   it('formate la note à la française', () => {
     expect(formaterNote(4.25)).toBe('4,3')
     expect(formaterNote(null)).toBe('–')
+  })
+})
+
+describe('Roulette géolocalisée', () => {
+  it('calcule la distance entre deux positions', () => {
+    expect(distanceKm({ lat: 48.8566, lng: 2.3522 }, { lat: 48.8666, lng: 2.3522 })).toBeCloseTo(1.112, 2)
+  })
+
+  it('ne garde que les restaurants publiés dans le rayon et les trie par distance', () => {
+    const position = { lat: 49, lng: 2 }
+    const resultats = restaurantsDansLeRayon(
+      [
+        { id: 1, statut: 'valide', lat: 49.015, lng: 2 },
+        { id: 2, statut: 'valide', lat: 49.005, lng: 2 },
+        { id: 3, statut: 'en_attente', lat: 49, lng: 2 },
+        { id: 4, statut: 'valide', lat: 49.1, lng: 2 },
+      ],
+      position,
+      2,
+    )
+
+    expect(resultats.map((restaurant) => restaurant.id)).toEqual([2, 1])
+  })
+
+  it('ignore les restaurants sans coordonnées', () => {
+    expect(restaurantsDansLeRayon([{ id: 1, statut: 'valide' }], { lat: 49, lng: 2 }, 10)).toEqual([])
   })
 })
 

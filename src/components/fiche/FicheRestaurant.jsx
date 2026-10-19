@@ -84,7 +84,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
             <div className="relative -mt-7 space-y-6 rounded-t-[28px] bg-gray-50 px-5 pt-6 pb-24">
               <header className="space-y-2">
                 {restaurant.statut !== 'valide' && (
-                  <Message type="info">Proposition en attente de validation par l’administrateur.</Message>
+                  <Message type="info">Proposition en attente de validation par les collègues.</Message>
                 )}
                 <div className="flex flex-wrap items-center gap-2">
                   <span

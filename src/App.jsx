@@ -10,6 +10,7 @@ import PageConnexion from './pages/PageConnexion.jsx'
 import PageProfil from './pages/PageProfil.jsx'
 import PageAjout from './pages/PageAjout.jsx'
 import PageAdmin from './pages/PageAdmin.jsx'
+import PageRoulette from './pages/PageRoulette.jsx'
 import Notification from './ui/Notification.jsx'
 import Message from './ui/Message.jsx'
 
@@ -34,8 +35,7 @@ function Application() {
   }
   if (!utilisateur) return <PageConnexion />
 
-  // Tant que le prénom n'est pas renseigné, on affiche le profil.
-  const pageAffichee = !utilisateur.prenom ? 'profil' : page
+  const pageAffichee = page
 
   return (
     <div className="flex h-dvh flex-col">
@@ -58,8 +58,9 @@ function Application() {
         )}
         {pageAffichee === 'ajouter' && <PageAjout />}
         {pageAffichee === 'admin' && <PageAdmin />}
+        {pageAffichee === 'roulette' && <PageRoulette />}
         {pageAffichee === 'profil' && <PageProfil key={utilisateur.prenom} />}
-        {!['carte', 'liste', 'restaurant', 'ajouter', 'admin', 'profil'].includes(pageAffichee) && (
+        {!['carte', 'liste', 'restaurant', 'ajouter', 'admin', 'roulette', 'profil'].includes(pageAffichee) && (
           <main className="p-4">
             <Message type="alerte">
               Page introuvable. <a href="#/" className="font-semibold underline">Retour à la carte</a>

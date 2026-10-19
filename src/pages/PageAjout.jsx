@@ -51,7 +51,7 @@ export default function PageAjout() {
               </p>
             ) : (
               <p>
-                <strong>{ajoute.nom}</strong> a été proposé. Il apparaîtra sur la carte dès que l’administrateur l’aura validé.
+                <strong>{ajoute.nom}</strong> a été proposé. Il apparaîtra sur la carte dès qu’un collègue l’aura validé.
               </p>
             )}
           </Message>

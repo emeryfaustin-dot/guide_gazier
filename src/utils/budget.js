@@ -17,7 +17,7 @@ export function trouverPlafond(departement, plafonds) {
 /**
  * Vérifie si un restaurant respecte le plafond de son département.
  * Si le département n'a pas de plafond configuré, on considère
- * le restaurant comme NON validé (prudence : l'admin doit d'abord fixer un plafond).
+ * le restaurant comme NON validé (prudence : un collègue doit d'abord fixer un plafond).
  */
 export function estDansLeBudget(restaurant, plafonds) {
   const plafond = trouverPlafond(restaurant.departement, plafonds)
@@ -35,7 +35,7 @@ export function verifierBudget(departement, prixMoyen, plafonds) {
 
   if (!departement) return { ok: false, plafond, message: 'Département inconnu : vérifie le code postal.' }
   if (plafond === null)
-    return { ok: false, plafond, message: `Aucun plafond n'est défini pour le département ${departement}. Demande à l'administrateur de l'ajouter.` }
+    return { ok: false, plafond, message: `Aucun plafond n'est défini pour le département ${departement}. Demande à un collègue de l'ajouter dans les réglages.` }
   if (!prix || prix <= 0) return { ok: false, plafond, message: 'Indique le prix moyen par personne.' }
   if (prix > plafond)
     return { ok: false, plafond, message: `Hors budget : ${prix} € dépasse le plafond de ${plafond} € du département ${departement}.` }

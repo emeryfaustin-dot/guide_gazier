@@ -8,12 +8,10 @@ import { VignetteCuisine } from '../ui/Icone.jsx'
 
 // Page de connexion.
 // - Avec Supabase : on saisit son email, on reçoit un "lien magique" (pas de mot de passe à retenir).
-// - En mode démo : connexion immédiate, avec une case pour tester le rôle administrateur.
+// - En mode démo : connexion immédiate avec l’adresse email.
 export default function PageConnexion() {
   const { service } = useDonnees()
   const [email, setEmail] = useState('')
-  const [prenom, setPrenom] = useState('')
-  const [admin, setAdmin] = useState(false)
   const [etat, setEtat] = useState({ enCours: false, lienEnvoye: false, erreur: '' })
   const demo = service.mode === 'demo'
 
@@ -21,7 +19,7 @@ export default function PageConnexion() {
     e.preventDefault()
     setEtat({ enCours: true, lienEnvoye: false, erreur: '' })
     try {
-      const { lienEnvoye } = await service.connexion({ email: email.trim(), prenom: prenom.trim(), admin })
+      const { lienEnvoye } = await service.connexion({ email: email.trim() })
       setEtat({ enCours: false, lienEnvoye, erreur: '' })
       if (!lienEnvoye) aller('/') // mode démo : connecté tout de suite → direction la carte
     } catch (err) {
@@ -61,20 +59,6 @@ export default function PageConnexion() {
             )}
 
             <div>
-              <label htmlFor="prenom" className={etiquette}>
-                Prénom
-              </label>
-              <input
-                id="prenom"
-                required
-                value={prenom}
-                onChange={(e) => setPrenom(e.target.value)}
-                autoComplete="given-name"
-                className={champ}
-              />
-            </div>
-
-            <div>
               <label htmlFor="email" className={etiquette}>
                 Email professionnel
               </label>
@@ -89,13 +73,6 @@ export default function PageConnexion() {
                 placeholder="prenom.nom@grtgaz.com"
               />
             </div>
-
-            {demo && (
-              <label className="flex min-h-11 cursor-pointer items-center gap-3">
-                <input type="checkbox" checked={admin} onChange={(e) => setAdmin(e.target.checked)} className="h-5 w-5 accent-tomate-800" />
-                Me connecter en administrateur (démo)
-              </label>
-            )}
 
             {etat.erreur && <Message type="erreur">{etat.erreur}</Message>}
 

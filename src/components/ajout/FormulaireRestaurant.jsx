@@ -79,7 +79,7 @@ export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
         horaires: depuisGoogle ? null : r.horaires.trim(),
         siteWeb: depuisGoogle ? null : r.siteWeb.trim(),
       })
-    }, utilisateur.role === 'admin' ? 'Restaurant publié' : 'Proposition envoyée à l’administrateur')
+    }, 'Restaurant proposé aux collègues')
     setEnCours(false)
     if (ok) onAjoute(ajoute)
   }
@@ -162,7 +162,7 @@ export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
 
       <div className="flex flex-wrap gap-2">
         <button type="submit" className={bouton.principal} disabled={!peutEnvoyer || enCours}>
-          {enCours ? 'Envoi…' : utilisateur.role === 'admin' ? 'Publier le restaurant' : 'Proposer le restaurant'}
+          {enCours ? 'Envoi…' : 'Proposer le restaurant'}
         </button>
         <button type="button" className={bouton.secondaire} onClick={onRetour}>
           Retour

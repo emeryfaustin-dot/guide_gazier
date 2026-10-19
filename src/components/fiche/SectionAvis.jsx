@@ -46,7 +46,7 @@ export default function SectionAvis({ restaurantId }) {
         <ul className="space-y-3">
           {avisDuRestaurant.map((a) => {
             const estLeMien = a.auteurId === utilisateur.id
-            const peutSupprimer = estLeMien || utilisateur.role === 'admin'
+            const peutSupprimer = estLeMien
             return (
               <li key={a.id} className={`rounded-xl border p-4 ${estLeMien ? 'border-tomate-300 bg-tomate-50' : 'border-gray-200 bg-white'}`}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2">

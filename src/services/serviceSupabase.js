@@ -52,12 +52,11 @@ function verifier({ data, error }) {
 
 async function chargerProfil(user) {
   if (!user) return null
-  const { data } = await supabase.from('profils').select('prenom, role').eq('id', user.id).maybeSingle()
+  const { data } = await supabase.from('profils').select('prenom').eq('id', user.id).maybeSingle()
   return {
     id: user.id,
     email: user.email,
     prenom: data?.prenom || user.user_metadata?.prenom || '',
-    role: data?.role || 'agent',
   }
 }
 
@@ -177,8 +176,7 @@ export const serviceSupabase = {
           lat: r.lat,
           lng: r.lng,
           place_id: r.placeId || null,
-          // Un admin publie directement ; les autres propositions attendent validation.
-          statut: utilisateur.role === 'admin' ? 'valide' : 'en_attente',
+          statut: 'en_attente',
           propose_par: utilisateur.id,
         })
         .select()
@@ -195,7 +193,7 @@ export const serviceSupabase = {
     verifier(await supabase.from('restaurants').delete().eq('id', id))
   },
 
-  // ---------- Plafonds (admin) ----------
+  // ---------- Plafonds partagés ----------
 
   async enregistrerPlafond(_utilisateur, { departement, nom, plafond }) {
     verifier(await supabase.from('plafonds').upsert({ departement, nom, plafond }, { onConflict: 'departement' }))

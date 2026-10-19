@@ -32,12 +32,6 @@ values
 
 alter table public.restaurants enable trigger avant_ajout_restaurant;
 
--- ---------------------------------------------------------------------
--- Devenir administrateur : connecte-toi UNE fois dans l'app (pour créer
--- ton profil), puis exécute cette ligne avec TON email :
---
---   update public.profils set role = 'admin' where email = 'ton.email@grtgaz.com';
---
 -- (Optionnel) Réserver l'app aux emails GRTgaz :
 --
 --   insert into public.domaines_autorises (domaine) values ('grtgaz.com');

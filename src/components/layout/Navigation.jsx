@@ -1,26 +1,25 @@
-import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 import Icone from '../../ui/Icone.jsx'
 
 // Liens de navigation principaux. Affichés :
 //  - en barre fixe en BAS de l'écran sur téléphone (facile à atteindre avec le pouce),
 //    avec le bouton « Ajouter » mis en avant au centre
 //  - dans l'en-tête sur grand écran
-function liens(estAdmin) {
+function liens() {
   return [
     { page: 'carte', href: '#/', icone: 'carte', texte: 'Carte' },
     { page: 'liste', href: '#/liste', icone: 'liste', texte: 'Liste' },
     { page: 'ajouter', href: '#/ajouter', icone: 'plus', texte: 'Ajouter', central: true },
-    ...(estAdmin ? [{ page: 'admin', href: '#/admin', icone: 'admin', texte: 'Admin' }] : []),
+    { page: 'roulette', href: '#/roulette', icone: 'roulette', texte: 'Roulette' },
+    { page: 'admin', href: '#/admin', icone: 'filtres', texte: 'Réglages' },
     { page: 'profil', href: '#/profil', icone: 'profil', texte: 'Profil' },
   ]
 }
 
 export function NavigationBas({ pageActive }) {
-  const { utilisateur } = useDonnees()
   return (
     <nav aria-label="Navigation principale" className="border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
       <ul className="flex items-end">
-        {liens(utilisateur?.role === 'admin').map((l) => {
+        {liens().map((l) => {
           const actif = pageActive === l.page
           if (l.central) {
             return (
@@ -61,11 +60,10 @@ export function NavigationBas({ pageActive }) {
 }
 
 export function NavigationHaut({ pageActive }) {
-  const { utilisateur } = useDonnees()
   return (
     <nav aria-label="Navigation principale" className="hidden md:block">
       <ul className="flex gap-1">
-        {liens(utilisateur?.role === 'admin').map((l) => (
+        {liens().map((l) => (
           <li key={l.page}>
             <a
               href={l.href}
