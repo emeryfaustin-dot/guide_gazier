@@ -56,8 +56,8 @@ export function IconeEtoile({ taille = 16, className = '' }) {
 }
 
 // Vignette carrée arrondie aux couleurs d'une cuisine, avec son pictogramme.
-export function VignetteCuisine({ cuisine, taille = 56, arrondi = 18 }) {
-  const style = styleCuisine(cuisine)
+export function VignetteCuisine({ cuisine, cuisines, taille = 56, arrondi = 18 }) {
+  const style = styleCuisine(cuisine, cuisines)
   return (
     <span
       className="flex shrink-0 items-center justify-center"

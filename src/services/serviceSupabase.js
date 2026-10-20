@@ -92,19 +92,21 @@ export const serviceSupabase = {
   // ---------- Lecture ----------
 
   async chargerTout(utilisateur) {
-    const [restaurants, plafonds, avis, favoris] = await Promise.all([
+    const [restaurants, plafonds, avis, favoris, cuisines] = await Promise.all([
       supabase.from('restaurants').select('*').order('nom'),
       supabase.from('plafonds').select('*').order('departement'),
       supabase.from('avis').select('*').order('cree_le', { ascending: false }),
       utilisateur
         ? supabase.from('favoris').select('restaurant_id').eq('utilisateur_id', utilisateur.id)
         : Promise.resolve({ data: [] }),
+      supabase.from('types_cuisine').select('nom, couleur, icone').order('nom'),
     ])
     return {
       restaurants: verifier(restaurants).map(versRestaurant),
       plafonds: verifier(plafonds).map((p) => ({ ...p, plafond: Number(p.plafond) })),
       avis: verifier(avis).map(versAvis),
       favoris: new Set(verifier(favoris).map((f) => f.restaurant_id)),
+      cuisines: verifier(cuisines),
     }
   },
 
@@ -187,5 +189,20 @@ export const serviceSupabase = {
 
   async supprimerPlafond(_utilisateur, departement) {
     verifier(await supabase.from('plafonds').delete().eq('departement', departement))
+  },
+
+  async enregistrerCuisine(_utilisateur, cuisine, ancienNom = null) {
+    if (ancienNom && ancienNom !== cuisine.nom) {
+      verifier(await supabase.from('types_cuisine').update(cuisine).eq('nom', ancienNom))
+      return
+    }
+    verifier(await supabase.from('types_cuisine').upsert(cuisine, { onConflict: 'nom' }))
+  },
+
+  async supprimerCuisine(_utilisateur, nom) {
+    const result = await supabase.from('restaurants').select('id', { count: 'exact', head: true }).eq('cuisine', nom)
+    verifier(result)
+    if (result.count > 0) throw new Error('Ce type est utilisé par un restaurant et ne peut pas être supprimé.')
+    verifier(await supabase.from('types_cuisine').delete().eq('nom', nom))
   },
 }

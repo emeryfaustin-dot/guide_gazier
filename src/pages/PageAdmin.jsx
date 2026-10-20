@@ -3,6 +3,7 @@ import { useDonnees } from '../contexte/DonneesContexte.jsx'
 import Propositions from '../components/admin/Propositions.jsx'
 import GestionPlafonds from '../components/admin/GestionPlafonds.jsx'
 import GestionRestaurants from '../components/admin/GestionRestaurants.jsx'
+import GestionCuisines from '../components/admin/GestionCuisines.jsx'
 
 // Espace de réglages partagé par tous les collègues connectés.
 export default function PageAdmin() {
@@ -14,6 +15,7 @@ export default function PageAdmin() {
     { id: 'propositions', texte: `Propositions${nbAttente ? ` (${nbAttente})` : ''}` },
     { id: 'plafonds', texte: 'Plafonds' },
     { id: 'restaurants', texte: 'Restaurants' },
+    { id: 'cuisines', texte: 'Types et logos' },
   ]
 
   return (
@@ -44,6 +46,7 @@ export default function PageAdmin() {
         {onglet === 'propositions' && <Propositions />}
         {onglet === 'plafonds' && <GestionPlafonds />}
         {onglet === 'restaurants' && <GestionRestaurants />}
+        {onglet === 'cuisines' && <GestionCuisines />}
       </section>
     </main>
   )

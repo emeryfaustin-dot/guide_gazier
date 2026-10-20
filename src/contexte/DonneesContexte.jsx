@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { service } from '../services/donnees.js'
 import { statistiquesNotes } from '../utils/notes.js'
+import { CUISINES_PAR_DEFAUT } from '../config/cuisines.js'
 
 // Le "contexte" React partage les données avec tous les composants,
 // sans devoir les passer de parent en enfant à chaque niveau.
@@ -10,7 +11,7 @@ const DonneesContexte = createContext(null)
 export function FournisseurDonnees({ children }) {
   const [utilisateur, setUtilisateur] = useState(null)
   const [sessionVerifiee, setSessionVerifiee] = useState(false)
-  const [donnees, setDonnees] = useState({ restaurants: [], plafonds: [], avis: [], favoris: new Set() })
+  const [donnees, setDonnees] = useState({ restaurants: [], plafonds: [], avis: [], favoris: new Set(), cuisines: CUISINES_PAR_DEFAUT })
   const [chargement, setChargement] = useState(true)
   const [erreur, setErreur] = useState(null)
   const [notification, setNotification] = useState(null)
@@ -36,7 +37,8 @@ export function FournisseurDonnees({ children }) {
     setChargement(true)
     setErreur(null)
     try {
-      setDonnees(await service.chargerTout(utilisateur))
+      const chargees = await service.chargerTout(utilisateur)
+      setDonnees({ ...chargees, cuisines: chargees.cuisines ?? CUISINES_PAR_DEFAUT })
     } catch (e) {
       setErreur(e.message)
     } finally {

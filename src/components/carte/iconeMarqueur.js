@@ -8,8 +8,8 @@ import { styleCuisine } from '../../config/cuisines.js'
 // Hors budget = même pin + une pastille « ! » orange en haut à droite :
 // l'info ne repose donc pas uniquement sur la couleur (accessibilité).
 
-function creerIcone(cuisine, horsBudget) {
-  const style = styleCuisine(cuisine)
+function creerIcone(cuisine, horsBudget, cuisines) {
+  const style = styleCuisine(cuisine, cuisines)
   const traits = style.traits.map((d) => `<path d="${d}"/>`).join('')
   const pastille = horsBudget
     ? `<circle cx="35" cy="6" r="6" fill="#fff4e6" stroke="#8a4300" stroke-width="1.6"/>
@@ -38,8 +38,9 @@ function creerIcone(cuisine, horsBudget) {
 // (cuisine × budget), au lieu d'en recréer une à chaque affichage.
 const cache = new Map()
 
-export function iconePour(cuisine, horsBudget) {
-  const cle = `${cuisine}|${horsBudget}`
-  if (!cache.has(cle)) cache.set(cle, creerIcone(cuisine, horsBudget))
+export function iconePour(cuisine, horsBudget, cuisines) {
+  const style = styleCuisine(cuisine, cuisines)
+  const cle = `${cuisine}|${horsBudget}|${style.couleur}|${style.icone}`
+  if (!cache.has(cle)) cache.set(cle, creerIcone(cuisine, horsBudget, cuisines))
   return cache.get(cle)
 }

@@ -9,6 +9,7 @@ import { filtrerRestaurants, normaliser, compterFiltresActifs, FILTRES_PAR_DEFAU
 import { statistiquesNotes, formaterNote } from '../src/utils/notes.js'
 import { distanceKm, restaurantsDansLeRayon } from '../src/utils/geolocalisation.js'
 import { analyserAdresse } from '../api/rechercher-restaurant.js'
+import { styleCuisine } from '../src/config/cuisines.js'
 
 const plafonds = [
   { departement: '60', nom: 'Oise', plafond: 40 },
@@ -112,6 +113,19 @@ describe('Notes', () => {
   it('formate la note à la française', () => {
     expect(formaterNote(4.25)).toBe('4,3')
     expect(formaterNote(null)).toBe('–')
+  })
+})
+
+describe('Types de restaurant personnalisés', () => {
+  it('utilise la couleur et le pictogramme configurés', () => {
+    const style = styleCuisine('Libanais', [{ nom: 'Libanais', couleur: '#d85b32', icone: 'pizza' }])
+    expect(style.couleur).toBe('#d85b32')
+    expect(style.icone).toBe('pizza')
+    expect(style.traits).toEqual(styleCuisine('Italien').traits)
+  })
+
+  it('garde un style de repli pour un type inconnu', () => {
+    expect(styleCuisine('Cuisine inconnue').traits).toEqual(styleCuisine('Autre').traits)
   })
 })
 

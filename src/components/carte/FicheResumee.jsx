@@ -2,16 +2,18 @@ import BadgeBudget from '../../ui/BadgeBudget.jsx'
 import { IconeEtoile, VignetteCuisine } from '../../ui/Icone.jsx'
 import { styleCuisine } from '../../config/cuisines.js'
 import { formaterNote } from '../../utils/notes.js'
+import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 
 // Petite fiche affichée quand on clique sur un pin.
 // Remarque : on utilise des <div> et non des <p>, car la feuille de style de
 // Leaflet impose de grandes marges aux <p> dans les fiches.
 export default function FicheResumee({ restaurant, plafonds, stats }) {
-  const style = styleCuisine(restaurant.cuisine)
+  const { cuisines } = useDonnees()
+  const style = styleCuisine(restaurant.cuisine, cuisines)
   return (
     <div className="w-64 text-sm leading-snug text-gray-900">
       <div className="flex gap-3">
-        <VignetteCuisine cuisine={restaurant.cuisine} taille={48} arrondi={14} />
+        <VignetteCuisine cuisine={restaurant.cuisine} cuisines={cuisines} taille={48} arrondi={14} />
         <div className="min-w-0">
           <div className="text-xs font-bold tracking-wider uppercase" style={{ color: style.texte }}>
             {restaurant.cuisine} · {restaurant.ville}

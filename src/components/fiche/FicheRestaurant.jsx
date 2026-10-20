@@ -16,7 +16,7 @@ import Icone, { VignetteCuisine } from '../../ui/Icone.jsx'
 // Sur téléphone : plein écran. Sur grand écran : panneau à droite.
 // C'est une "boîte de dialogue" accessible : titre annoncé, touche Échap pour fermer.
 export default function FicheRestaurant({ restaurantId, onFermer }) {
-  const { restaurants, plafonds, stats, chargement } = useDonnees()
+  const { restaurants, plafonds, stats, cuisines, chargement } = useDonnees()
   const restaurant = restaurants.find((r) => String(r.id) === String(restaurantId))
   const { details, chargement: chargementGoogle, erreur: erreurGoogle } = useDetailsGoogle(restaurant?.placeId)
   const titreRef = useRef(null)
@@ -38,7 +38,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
   const siteWeb = details?.siteWeb ?? restaurant?.siteWeb
   const horaires = details?.horaires?.length ? details.horaires : restaurant?.horaires ? [restaurant.horaires] : []
   const statsResto = restaurant ? stats[restaurant.id] : null
-  const style = styleCuisine(restaurant?.cuisine)
+  const style = styleCuisine(restaurant?.cuisine, cuisines)
 
   return (
     <div className="fixed inset-0 z-[1500] flex justify-end bg-gray-950/40" onClick={onFermer}>
@@ -78,7 +78,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
             {details?.photo ? (
               <PhotoGoogle photo={details.photo} nom={restaurant.nom} />
             ) : (
-              <BandeauCuisine cuisine={restaurant.cuisine} />
+              <BandeauCuisine cuisine={restaurant.cuisine} cuisines={cuisines} />
             )}
 
             <div className="relative -mt-7 space-y-6 rounded-t-[28px] bg-gray-50 px-5 pt-6 pb-24">
@@ -91,7 +91,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
                     className="inline-flex items-center gap-1.5 rounded-full py-1 pr-3 pl-1.5 text-xs font-bold tracking-wider uppercase"
                     style={{ background: style.clair, color: style.texte }}
                   >
-                    <VignetteCuisine cuisine={restaurant.cuisine} taille={20} arrondi={7} />
+                    <VignetteCuisine cuisine={restaurant.cuisine} cuisines={cuisines} taille={20} arrondi={7} />
                     {restaurant.cuisine}
                   </span>
                   <span className="text-sm text-gray-600">
@@ -214,8 +214,8 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
 }
 
 // Bandeau coloré aux couleurs de la cuisine, quand Google ne fournit pas de photo.
-function BandeauCuisine({ cuisine }) {
-  const style = styleCuisine(cuisine)
+function BandeauCuisine({ cuisine, cuisines }) {
+  const style = styleCuisine(cuisine, cuisines)
   return (
     <div className="relative h-52 overflow-hidden" style={{ background: style.couleur }} aria-hidden="true">
       <svg

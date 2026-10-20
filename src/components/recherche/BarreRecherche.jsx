@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import PanneauFiltres from './PanneauFiltres.jsx'
 import { compterFiltresActifs } from '../../utils/filtres.js'
-import { CUISINES, styleCuisine } from '../../config/cuisines.js'
+import { styleCuisine } from '../../config/cuisines.js'
 import Icone from '../../ui/Icone.jsx'
+import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 
 // Barre du haut des vues Carte et Liste :
 // champ de recherche + bouton "Filtres" + puces de cuisine (filtre en un geste).
 export default function BarreRecherche({ filtres, setFiltres, nombreResultats }) {
   const [filtresOuverts, setFiltresOuverts] = useState(false)
+  const { cuisines } = useDonnees()
   const nbActifs = compterFiltresActifs(filtres)
 
   // Une puce par cuisine ; « Tout » remet le filtre cuisine à vide.
-  const puces = [{ valeur: '', texte: 'Tout' }, ...CUISINES.map((c) => ({ valeur: c, texte: c }))]
+  const puces = [{ valeur: '', texte: 'Tout' }, ...cuisines.map(({ nom }) => ({ valeur: nom, texte: nom }))]
 
   return (
     <div className="bg-gray-50 px-3 pt-3 pb-2">
@@ -67,7 +69,7 @@ export default function BarreRecherche({ filtres, setFiltres, nombreResultats })
             >
               <span
                 className="h-2.5 w-2.5 rounded-[4px]"
-                style={{ background: p.valeur ? styleCuisine(p.valeur).couleur : actif ? '#ffffff' : '#1b1a17' }}
+                style={{ background: p.valeur ? styleCuisine(p.valeur, cuisines).couleur : actif ? '#ffffff' : '#1b1a17' }}
                 aria-hidden="true"
               />
               {p.texte}

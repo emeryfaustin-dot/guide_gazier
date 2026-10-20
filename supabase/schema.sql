@@ -30,6 +30,23 @@ create table if not exists public.plafonds (
   plafond     numeric(6, 2) not null check (plafond > 0) -- en € par personne
 );
 
+-- Types de restaurant personnalisables avec leur couleur et leur pictogramme.
+create table if not exists public.types_cuisine (
+  nom     text primary key check (char_length(nom) between 1 and 40),
+  couleur text not null check (couleur ~ '^#[0-9A-Fa-f]{6}$'),
+  icone   text not null check (icone in ('vin', 'bol', 'burger', 'poisson', 'pizza', 'couverts'))
+);
+grant select, insert, update, delete on public.types_cuisine to authenticated;
+
+insert into public.types_cuisine (nom, couleur, icone) values
+  ('Rapide', '#e8a317', 'burger'),
+  ('Français', '#7a2638', 'vin'),
+  ('Japonais', '#23395b', 'bol'),
+  ('Portugais', '#1d6f86', 'poisson'),
+  ('Italien', '#2f7a4d', 'pizza'),
+  ('Autre', '#5c4f86', 'couverts')
+on conflict (nom) do nothing;
+
 -- Restaurants.
 -- Pour Google : on garde surtout place_id ; téléphone, horaires, site et photo
 -- sont relus en direct chez Google à l'ouverture de la fiche (voir /api).
@@ -40,7 +57,7 @@ create table if not exists public.restaurants (
   ville        text not null,
   code_postal  text not null,
   departement  text not null,
-  cuisine      text not null,
+  cuisine      text not null references public.types_cuisine (nom) on update cascade on delete restrict,
   prix_moyen   numeric(6, 2) not null check (prix_moyen > 0),
   telephone    text,               -- rempli seulement en saisie manuelle
   horaires     text,               -- idem
@@ -200,6 +217,7 @@ create trigger apres_maj_prenom
 
 alter table public.profils            enable row level security;
 alter table public.plafonds           enable row level security;
+alter table public.types_cuisine      enable row level security;
 alter table public.restaurants        enable row level security;
 alter table public.favoris            enable row level security;
 alter table public.avis               enable row level security;
@@ -223,6 +241,11 @@ drop policy if exists "plafonds lisibles" on public.plafonds;
 drop policy if exists "plafonds admin" on public.plafonds;
 drop policy if exists "plafonds partages" on public.plafonds;
 create policy "plafonds partages" on public.plafonds
+  for all to authenticated using (true) with check (true);
+
+-- TYPES DE CUISINE : configuration partagée par les visiteurs.
+drop policy if exists "types cuisine partages" on public.types_cuisine;
+create policy "types cuisine partages" on public.types_cuisine
   for all to authenticated using (true) with check (true);
 
 -- RESTAURANTS : tout collègue connecté peut consulter et gérer la publication.

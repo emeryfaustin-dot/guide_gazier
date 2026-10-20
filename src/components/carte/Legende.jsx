@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CUISINES } from '../../config/cuisines.js'
+import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 import { VignetteCuisine } from '../../ui/Icone.jsx'
 
 // Légende repliable, en bas à gauche de la carte : une couleur par cuisine
@@ -7,6 +7,7 @@ import { VignetteCuisine } from '../../ui/Icone.jsx'
 // z-[1000] : place la légende AU-DESSUS de la carte (Leaflet utilise des z-index élevés).
 export default function Legende() {
   const [ouverte, setOuverte] = useState(false)
+  const { cuisines } = useDonnees()
 
   return (
     <div className="absolute bottom-6 left-3 z-[1000] rounded-2xl bg-white/95 text-sm shadow-[0_6px_20px_rgb(40_30_20/0.14)] backdrop-blur">
@@ -18,8 +19,8 @@ export default function Legende() {
         className="flex min-h-11 items-center gap-2 px-3 font-semibold text-gray-900"
       >
         <span className="flex -space-x-1" aria-hidden="true">
-          {CUISINES.slice(0, 4).map((c) => (
-            <VignetteCuisine key={c} cuisine={c} taille={18} arrondi={6} />
+          {cuisines.slice(0, 4).map(({ nom }) => (
+            <VignetteCuisine key={nom} cuisine={nom} cuisines={cuisines} taille={18} arrondi={6} />
           ))}
         </span>
         Légende
@@ -27,10 +28,10 @@ export default function Legende() {
 
       {ouverte && (
         <ul id="legende-carte" className="space-y-1.5 px-3 pb-3">
-          {CUISINES.map((c) => (
-            <li key={c} className="flex items-center gap-2">
-              <VignetteCuisine cuisine={c} taille={22} arrondi={7} />
-              {c}
+          {cuisines.map(({ nom }) => (
+            <li key={nom} className="flex items-center gap-2">
+              <VignetteCuisine cuisine={nom} cuisines={cuisines} taille={22} arrondi={7} />
+              {nom}
             </li>
           ))}
           <li className="flex items-center gap-2 border-t border-gray-200 pt-2">

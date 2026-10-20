@@ -1,5 +1,5 @@
 import ChampSelect from '../../ui/ChampSelect.jsx'
-import { CUISINES, OPTIONS_BUDGET, OPTIONS_NOTE } from '../../config/cuisines.js'
+import { OPTIONS_BUDGET, OPTIONS_NOTE } from '../../config/cuisines.js'
 import { FILTRES_PAR_DEFAUT } from '../../utils/filtres.js'
 import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 import { bouton } from '../../ui/styles.js'
@@ -7,7 +7,7 @@ import { bouton } from '../../ui/styles.js'
 // Panneau des filtres : cuisine, département, budget, note, favoris.
 // Les listes déroulantes stockent du texte ; on convertit en nombre quand il faut.
 export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
-  const { plafonds } = useDonnees()
+  const { plafonds, cuisines } = useDonnees()
   const maj = (champ, valeur) => setFiltres({ ...filtres, [champ]: valeur })
   const versNombre = (v) => (v === '' ? null : Number(v))
 
@@ -18,7 +18,7 @@ export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
           libelle="Type de cuisine"
           valeur={filtres.cuisine}
           onChange={(v) => maj('cuisine', v)}
-          options={[{ valeur: '', texte: 'Toutes' }, ...CUISINES.map((c) => ({ valeur: c, texte: c }))]}
+          options={[{ valeur: '', texte: 'Toutes' }, ...cuisines.map(({ nom }) => ({ valeur: nom, texte: nom }))]}
         />
         <ChampSelect
           libelle="Département"

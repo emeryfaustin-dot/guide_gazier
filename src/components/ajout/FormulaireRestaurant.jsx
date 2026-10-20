@@ -4,7 +4,6 @@ import { localiserAdresse } from '../../services/geocodage.js'
 import { verifierBudget } from '../../utils/budget.js'
 import { departementDepuisCodePostal } from '../../utils/departement.js'
 import { normaliser } from '../../utils/filtres.js'
-import { CUISINES } from '../../config/cuisines.js'
 import Message from '../../ui/Message.jsx'
 import { bouton, champ, etiquette } from '../../ui/styles.js'
 
@@ -13,7 +12,7 @@ import { bouton, champ, etiquette } from '../../ui/styles.js'
 //   (téléphone, horaires, site seront relus en direct chez Google).
 // - Saisie manuelle : on remplit tout et on localise l'adresse avec OpenStreetMap.
 export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
-  const { plafonds, restaurants, utilisateur, service, executer } = useDonnees()
+  const { plafonds, restaurants, cuisines, utilisateur, service, executer } = useDonnees()
   const depuisGoogle = Boolean(initial?.placeId)
 
   const [r, setR] = useState({
@@ -108,8 +107,8 @@ export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
         </label>
         <select id="cuisine" required value={r.cuisine} onChange={(e) => maj('cuisine', e.target.value)} className={champ}>
           <option value="">— Choisir —</option>
-          {CUISINES.map((c) => (
-            <option key={c}>{c}</option>
+          {cuisines.map(({ nom }) => (
+            <option key={nom}>{nom}</option>
           ))}
         </select>
       </div>

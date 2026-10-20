@@ -42,7 +42,9 @@ L'application crée ensuite une session invitée automatiquement, sans demander 
 ### Mettre à jour une base déjà installée
 Après le déploiement de la nouvelle version, ouvre **SQL Editor** et exécute le fichier
 `supabase/migrations/20261019_acces_partage.sql`, puis `supabase/migrations/20261020_session_invitee.sql`.
-La seconde migration permet aux profils invités de ne pas avoir d'adresse email.
+Exécute ensuite `supabase/migrations/20261021_types_cuisine.sql` pour ajouter la gestion partagée
+des types de restaurant, leurs couleurs et leurs pictogrammes. Les réglages se font dans
+**Réglages → Types et logos**; seules les icônes proposées par l'application sont disponibles.
 
 ---
 

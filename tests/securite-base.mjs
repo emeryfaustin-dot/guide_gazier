@@ -22,6 +22,7 @@ alter default privileges in schema public grant all on functions to authenticate
 await db.exec(fs.readFileSync(new URL('schema.sql', P),'utf8'))
 await db.exec(fs.readFileSync(new URL('migrations/20261019_acces_partage.sql', P),'utf8'))
 await db.exec(fs.readFileSync(new URL('migrations/20261020_session_invitee.sql', P),'utf8'))
+await db.exec(fs.readFileSync(new URL('migrations/20261021_types_cuisine.sql', P),'utf8'))
 const U1='11111111-1111-1111-1111-111111111111', U2='22222222-2222-2222-2222-222222222222'
 await db.exec(`insert into auth.users values ('${U1}','agent@grtgaz.com','{"prenom":"Julie"}'), ('${U2}','collegue@grtgaz.com','{"prenom":"Camille"}');`)
 await db.exec(fs.readFileSync(new URL('donnees-initiales.sql', P),'utf8'))
@@ -54,6 +55,18 @@ await test('agent : favori perso OK', async () => { await db.query(`insert into 
 await test("agent : favori d'un autre refusé", () => echoue(`insert into favoris values ('${U2}', 3)`, 'row-level security'))
 
 await comme(U2)
+await test('types de restaurant : ajout partagé avec couleur et logo', async () => {
+  await db.query(`insert into types_cuisine (nom, couleur, icone) values ('Libanais', '#d85b32', 'pizza')`)
+  const r = await val(`select nom, couleur, icone from types_cuisine where nom='Libanais'`)
+  assert(r[0].couleur === '#d85b32' && r[0].icone === 'pizza', JSON.stringify(r))
+})
+await test('types de restaurant : renommage propagé aux restaurants', async () => {
+  await db.query(`update restaurants set cuisine='Libanais' where id=1`)
+  await db.query(`update types_cuisine set nom='Cuisine libanaise' where nom='Libanais'`)
+  const r = await val(`select cuisine from restaurants where id=1`)
+  assert(r[0].cuisine === 'Cuisine libanaise', JSON.stringify(r))
+})
+await test('types de restaurant utilisés : suppression interdite', () => echoue(`delete from types_cuisine where nom='Cuisine libanaise'`))
 await test('collègue : voit les propositions en attente', async () => { const r=await val(`select count(*)::int n from restaurants where statut='en_attente'`); assert(r[0].n===0, r[0].n) })
 await test('collègue : ne voit pas les favoris des autres', async () => { const r=await val(`select count(*)::int n from favoris`); assert(r[0].n===0) })
 await test('second collègue : peut modifier un plafond commun', async () => { await db.query(`update plafonds set plafond=43 where departement='60'`); const r=await val(`select plafond::int p from plafonds where departement='60'`); assert(r[0].p===43) })

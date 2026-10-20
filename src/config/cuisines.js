@@ -15,6 +15,7 @@ export const OPTIONS_NOTE = [null, 3, 3.5, 4, 4.5]
 // - traits  : tracés SVG du pictogramme (grille 24 × 24, trait sans remplissage)
 export const STYLES_CUISINES = {
   Français: {
+    icone: 'vin',
     couleur: '#7a2638',
     encre: '#ffffff',
     texte: '#7a2638',
@@ -23,6 +24,7 @@ export const STYLES_CUISINES = {
     traits: ['M7 3h10l-.6 5.5a4.4 4.4 0 0 1-8.8 0z', 'M12 13v7', 'M8 21h8'],
   },
   Japonais: {
+    icone: 'bol',
     couleur: '#23395b',
     encre: '#ffffff',
     texte: '#23395b',
@@ -31,6 +33,7 @@ export const STYLES_CUISINES = {
     traits: ['M3 12h18a9 8 0 0 1-18 0z', 'M9 21h6', 'M14 9l6-6', 'M10.5 9l5-6'],
   },
   Rapide: {
+    icone: 'burger',
     couleur: '#e8a317',
     encre: '#2b1e00',
     texte: '#7a5200',
@@ -39,6 +42,7 @@ export const STYLES_CUISINES = {
     traits: ['M4 11a8 6.5 0 0 1 16 0z', 'M3 14.5h18', 'M5 17.5v.5a2.5 2.5 0 0 0 2.5 2.5h9A2.5 2.5 0 0 0 19 18v-.5z'],
   },
   Portugais: {
+    icone: 'poisson',
     couleur: '#1d6f86',
     encre: '#ffffff',
     texte: '#17596b',
@@ -47,6 +51,7 @@ export const STYLES_CUISINES = {
     traits: ['M2.5 12c3.5-5.5 10.5-6 14.5 0-4 6-11 5.5-14.5 0z', 'M17 12l4.5-3.5v7z', 'M7.5 11.2v.1'],
   },
   Italien: {
+    icone: 'pizza',
     couleur: '#2f7a4d',
     encre: '#ffffff',
     texte: '#24613d',
@@ -55,6 +60,7 @@ export const STYLES_CUISINES = {
     traits: ['M3 6.5c6-3.3 12-3.3 18 0L12 21z', 'M10 10.5v.1', 'M14 12.5v.1', 'M11.5 15v.1'],
   },
   Autre: {
+    icone: 'couverts',
     couleur: '#5c4f86',
     encre: '#ffffff',
     texte: '#5c4f86',
@@ -64,7 +70,42 @@ export const STYLES_CUISINES = {
   },
 }
 
-// Renvoie le style d'une cuisine ; une cuisine inconnue prend le style « Autre ».
-export function styleCuisine(cuisine) {
-  return STYLES_CUISINES[cuisine] ?? STYLES_CUISINES.Autre
+export const ICONES_CUISINE = Object.fromEntries(
+  Object.entries(STYLES_CUISINES).map(([, style]) => [style.icone, style.traits]),
+)
+
+export const CUISINES_PAR_DEFAUT = CUISINES.map((nom) => ({
+  nom,
+  couleur: STYLES_CUISINES[nom].couleur,
+  icone: STYLES_CUISINES[nom].icone,
+}))
+
+function couleurTexte(couleur) {
+  const valeur = Number.parseInt(couleur.slice(1), 16)
+  const rouge = valeur >> 16
+  const vert = (valeur >> 8) & 255
+  const bleu = valeur & 255
+  return (rouge * 299 + vert * 587 + bleu * 114) / 1000 > 150 ? '#2b2925' : '#ffffff'
+}
+
+// Renvoie les noms et styles actifs, avec les paramètres enregistrés en base.
+export function nomsCuisines(configurations = CUISINES_PAR_DEFAUT) {
+  return configurations.map((cuisine) => cuisine.nom)
+}
+
+export function styleCuisine(cuisine, configurations = CUISINES_PAR_DEFAUT) {
+  const configuration = configurations.find((element) => element.nom === cuisine)
+  const styleDefaut = STYLES_CUISINES[cuisine] ?? STYLES_CUISINES.Autre
+  const couleur = configuration?.couleur ?? styleDefaut.couleur
+  const icone = configuration?.icone ?? styleDefaut.icone
+
+  return {
+    ...styleDefaut,
+    couleur,
+    encre: couleurTexte(couleur),
+    texte: couleur,
+    clair: `color-mix(in srgb, ${couleur} 14%, white)`,
+    icone,
+    traits: ICONES_CUISINE[icone] ?? styleDefaut.traits,
+  }
 }

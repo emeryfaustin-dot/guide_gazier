@@ -1,10 +1,12 @@
 import { estDansLeBudget } from '../../utils/budget.js'
 import { formaterNote } from '../../utils/notes.js'
 import Icone, { IconeEtoile, VignetteCuisine } from '../../ui/Icone.jsx'
+import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 
 // Une "carte" (vignette) de restaurant dans la vue Liste.
 // Toute la vignette est un lien : grande zone facile à toucher sur mobile.
 export default function CarteRestaurant({ restaurant, plafonds, stats, estFavori }) {
+  const { cuisines } = useDonnees()
   const valide = estDansLeBudget(restaurant, plafonds)
 
   return (
@@ -12,7 +14,7 @@ export default function CarteRestaurant({ restaurant, plafonds, stats, estFavori
       href={`#/restaurant/${restaurant.id}`}
       className="flex items-center gap-4 rounded-3xl bg-white p-3.5 shadow-[0_1px_2px_rgb(40_30_20/0.06),0_6px_18px_rgb(40_30_20/0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgb(40_30_20/0.12)]"
     >
-      <VignetteCuisine cuisine={restaurant.cuisine} taille={60} />
+      <VignetteCuisine cuisine={restaurant.cuisine} cuisines={cuisines} taille={60} />
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">

@@ -45,6 +45,8 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 - Polices : **Bricolage Grotesque** (titres, classe `font-display`) + **Figtree** (texte), chargées dans `index.html`.
 - Chaque cuisine a une couleur + un pictogramme : `STYLES_CUISINES` dans `src/config/cuisines.js`
   (utilisé par les pins, la liste, la fiche, la légende). Nouvelle cuisine → l'ajouter là.
+- Types, couleurs et pictogrammes sont personnalisables dans Réglages → Types et logos
+  (table Supabase `types_cuisine`, données locales en mode démo).
 - Icônes : composant `src/ui/Icone.jsx` (SVG au trait). **Pas d'emoji** dans l'interface.
 
 ## Stack technique

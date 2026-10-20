@@ -59,6 +59,11 @@ export default function PageAjout() {
             <button type="button" className={bouton.principal} onClick={() => aller(`/restaurant/${ajoute.id}`)}>
               Voir la fiche
             </button>
+            {ajoute.statut === 'en_attente' && (
+              <button type="button" className={bouton.secondaire} onClick={() => aller('/admin')}>
+                Voir les propositions
+              </button>
+            )}
             <button
               type="button"
               className={bouton.secondaire}

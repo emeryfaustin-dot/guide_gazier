@@ -7,6 +7,7 @@ import restaurantsInitiaux from '../data/restaurants.json'
 import plafondsInitiaux from '../data/plafonds.json'
 import avisInitiaux from '../data/avis-demo.json'
 import { verifierBudget } from '../utils/budget.js'
+import { CUISINES_PAR_DEFAUT } from '../config/cuisines.js'
 
 const CLE_DONNEES = 'guide-gazier-demo-donnees-v1'
 const CLE_UTILISATEUR = 'guide-gazier-demo-utilisateur-v1'
@@ -35,10 +36,12 @@ const baseInitiale = () =>
     restaurants: restaurantsInitiaux,
     plafonds: plafondsInitiaux,
     avis: avisInitiaux,
+    cuisines: CUISINES_PAR_DEFAUT,
     favoris: {}, // { [utilisateurId]: [restaurantId, ...] }
   })
 
 let base = lire(CLE_DONNEES, null) ?? baseInitiale()
+base.cuisines ??= structuredClone(CUISINES_PAR_DEFAUT)
 const sauver = () => ecrire(CLE_DONNEES, base)
 
 let ecouteurs = []
@@ -84,6 +87,7 @@ export const serviceDemo = {
       plafonds: structuredClone(base.plafonds),
       avis: structuredClone(base.avis).sort((a, b) => b.creeLe.localeCompare(a.creeLe)),
       favoris: new Set(utilisateur ? (base.favoris[utilisateur.id] ?? []) : []),
+      cuisines: structuredClone(base.cuisines),
     }
   },
 
@@ -160,6 +164,28 @@ export const serviceDemo = {
 
   async supprimerPlafond(_utilisateur, departement) {
     base.plafonds = base.plafonds.filter((p) => p.departement !== departement)
+    sauver()
+  },
+
+  async enregistrerCuisine(_utilisateur, cuisine, ancienNom = null) {
+    if (ancienNom && ancienNom !== cuisine.nom) {
+      base.cuisines = base.cuisines.filter((element) => element.nom !== ancienNom)
+      base.restaurants.forEach((restaurant) => {
+        if (restaurant.cuisine === ancienNom) restaurant.cuisine = cuisine.nom
+      })
+    } else {
+      base.cuisines = base.cuisines.filter((element) => element.nom !== cuisine.nom)
+    }
+    base.cuisines.push(cuisine)
+    base.cuisines.sort((a, b) => a.nom.localeCompare(b.nom))
+    sauver()
+  },
+
+  async supprimerCuisine(_utilisateur, nom) {
+    if (base.restaurants.some((restaurant) => restaurant.cuisine === nom)) {
+      throw new Error('Ce type est utilisé par un restaurant et ne peut pas être supprimé.')
+    }
+    base.cuisines = base.cuisines.filter((cuisine) => cuisine.nom !== nom)
     sauver()
   },
 
