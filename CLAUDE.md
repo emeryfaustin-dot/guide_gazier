@@ -77,7 +77,8 @@ supabase/
   schema.sql                 # tables, triggers, règles RLS
   migrations/                # évolutions pour une base déjà installée
   donnees-initiales.sql      # plafonds + 10 restaurants d'exemple
-docs/MISE-EN-PRODUCTION.md   # Supabase, Google (clé + coûts), GitHub, Vercel
+docs/MISE-EN-PRODUCTION.md   # Supabase, Google (clé + coûts), GitHub, Vercel, installation / APK
+public/                      # logo, favicon, icônes + manifest.webmanifest + sw.js (PWA installable)
 tests/regles.test.js         # tests des règles métier (npm test)
 src/
   App.jsx                    # routes + mise en page
@@ -137,7 +138,7 @@ src/
 - Modifier un restaurant (prix, cuisine) depuis les réglages partagés.
 - Regroupement des marqueurs proches (leaflet.markercluster) quand il y aura beaucoup de restaurants.
 - « Autour de moi » (géolocalisation du téléphone) et tri par distance.
-- Mode hors-ligne / PWA installable.
+- Mode hors-ligne (la PWA est installable, mais le service worker ne met rien en cache).
 
 ## Commandes
 - `npm install` : installer les dépendances

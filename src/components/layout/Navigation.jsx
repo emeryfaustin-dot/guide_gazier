@@ -2,7 +2,9 @@ import Icone from '../../ui/Icone.jsx'
 
 // Liens de navigation principaux. Affichés :
 //  - en barre fixe en BAS de l'écran sur téléphone (facile à atteindre avec le pouce),
-//    avec le bouton « Ajouter » mis en avant au centre
+//    avec le bouton « Ajouter » mis en avant au centre. On y garde un nombre
+//    IMPAIR de liens (5) pour que « Ajouter » tombe pile au milieu ; « Profil »
+//    passe alors dans l'en-tête (voir LienProfilMobile)
 //  - dans l'en-tête sur grand écran
 function liens() {
   return [
@@ -11,7 +13,7 @@ function liens() {
     { page: 'ajouter', href: '#/ajouter', icone: 'plus', texte: 'Ajouter', central: true },
     { page: 'roulette', href: '#/roulette', icone: 'roulette', texte: 'Roulette' },
     { page: 'admin', href: '#/admin', icone: 'filtres', texte: 'Réglages' },
-    { page: 'profil', href: '#/profil', icone: 'profil', texte: 'Profil' },
+    { page: 'profil', href: '#/profil', icone: 'profil', texte: 'Profil', horsBarreBas: true },
   ]
 }
 
@@ -19,7 +21,7 @@ export function NavigationBas({ pageActive }) {
   return (
     <nav aria-label="Navigation principale" className="border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
       <ul className="flex items-end">
-        {liens().map((l) => {
+        {liens().filter((l) => !l.horsBarreBas).map((l) => {
           const actif = pageActive === l.page
           if (l.central) {
             return (
@@ -79,5 +81,22 @@ export function NavigationHaut({ pageActive }) {
         ))}
       </ul>
     </nav>
+  )
+}
+
+// Sur téléphone : accès au profil depuis l'en-tête (il n'est plus dans la barre du bas).
+export function LienProfilMobile({ pageActive }) {
+  const actif = pageActive === 'profil'
+  return (
+    <a
+      href="#/profil"
+      aria-label="Profil"
+      aria-current={actif ? 'page' : undefined}
+      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl md:hidden ${
+        actif ? 'bg-natran-400 text-gray-950' : 'text-gray-100 hover:bg-gray-800'
+      }`}
+    >
+      <Icone nom="profil" taille={24} />
+    </a>
   )
 }

@@ -15,3 +15,9 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+// Enregistre le service worker (version en ligne seulement) : permet
+// d'installer l'app sur l'écran d'accueil du téléphone.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+}

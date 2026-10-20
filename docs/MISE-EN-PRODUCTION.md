@@ -133,3 +133,21 @@ Ce que tu dois régler toi-même dans Google Cloud :
 - [ ] Modifier un plafond change immédiatement les badges sur la carte
 - [ ] La recherche Google fonctionne, et la saisie manuelle prend le relais si Google est coupé
 - [ ] Quota Google et alerte budget configurés
+
+## Installer l'app sur le téléphone
+
+L'app est une **PWA** (application web installable) : `public/manifest.webmanifest`,
+`public/sw.js` et les icônes `public/icone-*.png`. Elle se met à jour toute seule à chaque déploiement Vercel.
+
+- **Android (Chrome)** : ouvrir l'adresse Vercel → menu ⋮ → **Installer l'application**.
+- **iPhone (Safari)** : bouton Partager → **Sur l'écran d'accueil**.
+
+### Obtenir un fichier .apk (facultatif)
+1. Aller sur https://www.pwabuilder.com et coller l'adresse Vercel du site.
+2. **Package For Stores** → **Android** → **Generate Package** → télécharger le .zip.
+3. Le .zip contient un `.apk` : l'envoyer sur le téléphone et l'ouvrir
+   (autoriser « Installer des applis inconnues » pour le navigateur ou le gestionnaire de fichiers).
+4. Garder précieusement le fichier `signing.keystore` et `signing-key-info.txt` du .zip :
+   ils sont nécessaires pour publier une mise à jour du même APK.
+
+L'APK n'est qu'une « coquille » qui ouvre le site : pas besoin de le regénérer quand on modifie l'app.

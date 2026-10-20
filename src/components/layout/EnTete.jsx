@@ -1,4 +1,4 @@
-import { NavigationHaut } from './Navigation.jsx'
+import { LienProfilMobile, NavigationHaut } from './Navigation.jsx'
 import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 
 // Bandeau du haut (fond foncé) : logo + nom en jaune NaTran, badge "Démo" si besoin, navigation (grand écran).
@@ -16,6 +16,7 @@ export default function EnTete({ pageActive }) {
         )}
       </a>
       <NavigationHaut pageActive={pageActive} />
+      <LienProfilMobile pageActive={pageActive} />
     </header>
   )
 }
