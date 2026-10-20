@@ -15,10 +15,13 @@ export function FournisseurDonnees({ children }) {
   const [erreur, setErreur] = useState(null)
   const [notification, setNotification] = useState(null)
 
-  // 1. Au démarrage : y a-t-il déjà quelqu'un de connecté ? Puis on écoute les changements.
+  // 1. Au démarrage : récupère ou crée la session invitée, puis écoute ses changements.
   useEffect(() => {
     service.obtenirUtilisateur().then((u) => {
       setUtilisateur(u)
+      setSessionVerifiee(true)
+    }).catch((e) => {
+      setErreur(e.message)
       setSessionVerifiee(true)
     })
     return service.surChangementSession((u) => {

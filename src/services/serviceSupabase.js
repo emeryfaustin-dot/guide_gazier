@@ -48,7 +48,7 @@ function verifier({ data, error }) {
   return data
 }
 
-// ---------- Authentification ----------
+// ---------- Session invitée ----------
 
 async function chargerProfil(user) {
   if (!user) return null
@@ -65,7 +65,11 @@ export const serviceSupabase = {
 
   async obtenirUtilisateur() {
     const { data } = await supabase.auth.getSession()
-    return chargerProfil(data.session?.user)
+    if (data.session?.user) return chargerProfil(data.session.user)
+
+    const { data: sessionInvitee, error } = await supabase.auth.signInAnonymously()
+    verifier({ data: sessionInvitee, error })
+    return chargerProfil(sessionInvitee.user)
   },
 
   surChangementSession(callback) {
@@ -74,24 +78,6 @@ export const serviceSupabase = {
       setTimeout(async () => callback(await chargerProfil(session?.user)), 0)
     })
     return () => data.subscription.unsubscribe()
-  },
-
-  // Connexion "lien magique" : Supabase envoie un email avec un lien de connexion.
-  async connexion({ email, prenom }) {
-    verifier(
-      await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: window.location.origin,
-          data: { prenom }, // mémorisé à la création du compte (voir trigger SQL)
-        },
-      }),
-    )
-    return { lienEnvoye: true }
-  },
-
-  async deconnexion() {
-    await supabase.auth.signOut()
   },
 
   async modifierPrenom(utilisateur, prenom) {

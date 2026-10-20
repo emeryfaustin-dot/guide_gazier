@@ -50,29 +50,19 @@ export const serviceDemo = {
   mode: 'demo',
 
   async obtenirUtilisateur() {
-    return lire(CLE_UTILISATEUR, null)
+    const ancien = lire(CLE_UTILISATEUR, null)
+    const utilisateur = {
+      id: ancien?.id ?? 'demo-anonyme',
+      email: null,
+      prenom: ancien?.prenom ?? '',
+    }
+    ecrire(CLE_UTILISATEUR, utilisateur)
+    return utilisateur
   },
 
   surChangementSession(callback) {
     ecouteurs.push(callback)
     return () => (ecouteurs = ecouteurs.filter((cb) => cb !== callback))
-  },
-
-  // En démo, chaque collègue entre avec son adresse email.
-  async connexion({ email }) {
-    const utilisateur = { id: `demo-${email.toLowerCase()}`, email, prenom: '' }
-    ecrire(CLE_UTILISATEUR, utilisateur)
-    prevenir(utilisateur)
-    return { lienEnvoye: false }
-  },
-
-  async deconnexion() {
-    try {
-      localStorage.removeItem(CLE_UTILISATEUR)
-    } catch {
-      /* ignoré */
-    }
-    prevenir(null)
   },
 
   async modifierPrenom(utilisateur, prenom) {

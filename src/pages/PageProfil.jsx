@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDonnees } from '../contexte/DonneesContexte.jsx'
 import { bouton, champ, etiquette } from '../ui/styles.js'
 
-// Page profil : modifier son prénom facultatif et se déconnecter.
+// Page profil : modifier son prénom et consulter son activité.
 export default function PageProfil() {
   const { utilisateur, service, executer, favoris, avis } = useDonnees()
   const [prenom, setPrenom] = useState(utilisateur.prenom)
@@ -35,8 +35,6 @@ export default function PageProfil() {
       </form>
 
       <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-xl bg-white p-4 shadow-sm">
-        <dt className="font-semibold text-gray-700">Email</dt>
-        <dd className="break-all">{utilisateur.email}</dd>
         <dt className="font-semibold text-gray-700">Favoris</dt>
         <dd>{favoris.size}</dd>
         <dt className="font-semibold text-gray-700">Avis donnés</dt>
@@ -44,9 +42,6 @@ export default function PageProfil() {
       </dl>
 
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={bouton.secondaire} onClick={() => service.deconnexion()}>
-          Se déconnecter
-        </button>
         {service.mode === 'demo' && (
           <button type="button" className={bouton.danger} onClick={reinitialiserDemo}>
             Réinitialiser la démo

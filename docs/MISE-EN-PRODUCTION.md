@@ -7,7 +7,7 @@ Ordre conseillé : **1. Supabase → 2. Google Places → 3. GitHub → 4. Verce
 
 ---
 
-## 1. Supabase (base de données + connexion par email)
+## 1. Supabase (base de données + accès invité)
 
 ### Créer le projet
 1. Va sur https://supabase.com → **Start your project** → connecte-toi (avec GitHub, c'est le plus simple).
@@ -32,30 +32,17 @@ Ordre conseillé : **1. Supabase → 2. Google Places → 3. GitHub → 4. Verce
 4. Relance `npm run dev` : le badge **DÉMO** disparaît.
 
 > La clé « anon » est publique par nature (elle part dans le navigateur). Ce qui protège les données,
-> ce sont les **règles RLS** du fichier `schema.sql` : seuls les comptes connectés peuvent modifier
-> les réglages partagés, et chacun ne peut modifier que ses propres avis.
+> ce sont les **règles RLS** du fichier `schema.sql` : les sessions invitées peuvent modifier
+> les réglages partagés, et chaque session ne peut modifier que ses propres avis.
 
-### Régler la connexion par email
-1. **Authentication** → **URL Configuration** :
-   - **Site URL** : `http://localhost:5173` (tu la remplaceras par l'adresse Vercel à l'étape 4).
-   - **Redirect URLs** : ajoute `http://localhost:5173/**`.
-     Pour tester sur ton téléphone en local, ajoute aussi `http://192.168.*.*:5173/**`.
-2. **Authentication** → **Sign In / Providers** → vérifie que **Email** est activé.
-3. Attention : le service email gratuit de Supabase est limité à **quelques emails par heure**.
-   Pour l'usage réel avec les collègues, branche un fournisseur SMTP
-   (Authentication → Emails → SMTP Settings ; ex. Brevo ou Resend, gratuits pour un petit volume).
+### Activer l'accès invité
+Dans **Authentication → Sign In / Providers**, active **Allow anonymous sign-ins**.
+L'application crée ensuite une session invitée automatiquement, sans demander d'adresse email ni de mot de passe.
 
 ### Mettre à jour une base déjà installée
 Après le déploiement de la nouvelle version, ouvre **SQL Editor** et exécute le fichier
-`supabase/migrations/20261019_acces_partage.sql`. Il supprime le rôle administrateur et permet
-à tout compte connecté de modifier les réglages et le statut des restaurants. Chaque ajout reste
-en attente jusqu'à sa validation par un collègue.
-
-### (Recommandé) Réserver l'app aux emails GRTgaz
-```sql
-insert into public.domaines_autorises (domaine) values ('grtgaz.com');
-```
-Ensuite, une adresse Gmail ou autre ne pourra plus créer de compte.
+`supabase/migrations/20261019_acces_partage.sql`, puis `supabase/migrations/20261020_session_invitee.sql`.
+La seconde migration permet aux profils invités de ne pas avoir d'adresse email.
 
 ---
 
@@ -83,7 +70,7 @@ Google facture à l'appel, avec un **quota gratuit chaque mois par type d'appel*
 Ce que fait déjà l'app pour rester économe :
 - Elle ne demande **que les champs utiles** (« FieldMask ») : la recherche reste en catégorie « Pro ».
 - La recherche n'est lancée **que sur clic** (pas à chaque lettre tapée).
-- Les fonctions `/api` refusent les appels des personnes **non connectées**.
+- Les fonctions `/api` refusent les appels sans session invitée valide.
 - La fiche relit téléphone, horaires, site et photo chez Google. Ces champs sont en catégorie « Enterprise »,
   la plus chère : c'est le poste à surveiller si l'app est très utilisée.
 
@@ -127,9 +114,7 @@ Ce que tu dois régler toi-même dans Google Cloud :
 3. **Environment Variables** : ajoute les **3** variables de ton `.env`
    (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `GOOGLE_PLACES_API_KEY`).
 4. **Deploy**. Après 1 minute, tu as une adresse du type `https://guide-gazier.vercel.app`.
-5. Retourne dans **Supabase → Authentication → URL Configuration** :
-   - **Site URL** = l'adresse Vercel,
-   - ajoute `https://guide-gazier.vercel.app/**` dans les **Redirect URLs**.
+5. Vérifie dans **Supabase → Authentication → Sign In / Providers** que **Allow anonymous sign-ins** est toujours activé.
 6. Sur ton téléphone, ouvre l'adresse puis **Partager → Sur l'écran d'accueil** : l'app s'ouvre comme une appli.
 
 À chaque `git push`, Vercel remet automatiquement l'app à jour.
@@ -139,8 +124,8 @@ Ce que tu dois régler toi-même dans Google Cloud :
 ## Vérifications finales (checklist)
 
 - [ ] `npm test` : tous les tests passent
-- [ ] Connexion par email OK (lien reçu, connexion sur le même appareil)
-- [ ] Tout collègue connecté peut ouvrir les Réglages et modifier les plafonds
+- [ ] L'application s'ouvre sans demander d'email ni de mot de passe
+- [ ] Un visiteur peut ouvrir les Réglages et modifier les plafonds partagés
 - [ ] Une proposition apparaît dans Réglages → Propositions, puis sur la carte après validation collective
 - [ ] Un restaurant au-dessus du plafond est refusé à l'ajout
 - [ ] Modifier un plafond change immédiatement les badges sur la carte

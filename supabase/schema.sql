@@ -15,10 +15,10 @@
 -- 1. TABLES
 -- ---------------------------------------------------------------------
 
--- Profil de chaque collègue (créé automatiquement à la 1re connexion).
+-- Profil de chaque visiteur (créé automatiquement à la première session invitée).
 create table if not exists public.profils (
   id      uuid primary key references auth.users (id) on delete cascade,
-  email   text not null,
+  email   text,
   prenom  text not null default '',
   cree_le timestamptz not null default now()
 );
@@ -85,13 +85,14 @@ create table if not exists public.domaines_autorises (
 -- 2. FONCTIONS ET TRIGGERS
 -- ---------------------------------------------------------------------
 
--- À la création d'un compte : vérifie le domaine email et crée le profil.
+-- À la création d'une session : vérifie les emails renseignés et crée le profil.
 create or replace function public.creer_profil()
 returns trigger
 language plpgsql security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from public.domaines_autorises)
+    if new.email is not null
+      and exists (select 1 from public.domaines_autorises)
      and not exists (select 1 from public.domaines_autorises
                      where lower(split_part(new.email, '@', 2)) = lower(domaine)) then
     raise exception 'Adresse email non autorisée pour cette application.';

@@ -21,6 +21,7 @@ alter default privileges in schema public grant all on functions to authenticate
 `)
 await db.exec(fs.readFileSync(new URL('schema.sql', P),'utf8'))
 await db.exec(fs.readFileSync(new URL('migrations/20261019_acces_partage.sql', P),'utf8'))
+await db.exec(fs.readFileSync(new URL('migrations/20261020_session_invitee.sql', P),'utf8'))
 const U1='11111111-1111-1111-1111-111111111111', U2='22222222-2222-2222-2222-222222222222'
 await db.exec(`insert into auth.users values ('${U1}','agent@grtgaz.com','{"prenom":"Julie"}'), ('${U2}','collegue@grtgaz.com','{"prenom":"Camille"}');`)
 await db.exec(fs.readFileSync(new URL('donnees-initiales.sql', P),'utf8'))
@@ -63,5 +64,6 @@ await db.exec(`reset role; select set_config('request.jwt.claim.sub','',false);`
 await db.exec(`insert into domaines_autorises values ('grtgaz.com')`)
 await test('domaine non autorisé refusé à la création de compte', () => echoue(`insert into auth.users values (gen_random_uuid(),'x@gmail.com','{}')`, 'non autorisée'))
 await test('domaine autorisé accepté', async () => { await db.query(`insert into auth.users values (gen_random_uuid(),'y@GRTgaz.com','{}')`) })
+await test('session invitée acceptée sans email', async () => { await db.query(`insert into auth.users values (gen_random_uuid(),null,'{}')`); const r=await val(`select count(*)::int n from profils where email is null`); assert(r[0].n===1, r[0].n) })
 console.log(`\n${ok} réussis, ${ko} échoués`)
 process.exit(ko ? 1 : 0)

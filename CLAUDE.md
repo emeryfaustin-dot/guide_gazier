@@ -50,7 +50,7 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 ## Stack technique
 - **React 19 + Vite 8**, **Tailwind CSS v4** (`@tailwindcss/vite`, import unique dans `src/index.css`)
 - **Leaflet + react-leaflet 5** (tuiles OpenStreetMap, attribution obligatoire)
-- **Supabase** (`@supabase/supabase-js`) : Postgres + RLS + connexion par lien magique (email)
+- **Supabase** (`@supabase/supabase-js`) : Postgres + RLS + session invitée automatique (aucun email demandé)
 - **Fonctions serveur** `api/*.js` (format Vercel, Node) pour Google Places ; en local, servies par
   un petit plugin dans `vite.config.js`
 - **Vitest** pour les tests ; **oxlint** pour la qualité
@@ -58,7 +58,7 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 
 ## Mode démo
 Si `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` sont absents, l'app utilise `serviceDemo.js`
-(localStorage, données de `src/data/`). En démo, connexion avec une adresse email.
+(localStorage, données de `src/data/`). En démo, un profil invité est créé automatiquement.
 Les deux services (`serviceSupabase.js`, `serviceDemo.js`) exposent **exactement les mêmes fonctions** :
 toute nouvelle fonction doit être ajoutée aux deux.
 
@@ -86,14 +86,14 @@ src/
   utils/budget.js, filtres.js, notes.js, departement.js, geolocalisation.js # logique pure, testée
   ui/                        # petits composants génériques + styles.js
   components/carte|recherche|liste|fiche|ajout|admin|layout/
-  pages/                     # VueRestaurants, PageAjout, PageRoulette, réglages, PageProfil, PageConnexion
+  pages/                     # VueRestaurants, PageAjout, PageRoulette, réglages, PageProfil
 ```
 
 ## Modèle de données (côté app, camelCase)
 - Restaurant : `id, nom, adresse, ville, codePostal, departement, cuisine, prixMoyen, telephone, horaires,
   siteWeb, lat, lng, placeId, statut, proposePar, creeLe` (base en snake_case, conversion dans serviceSupabase)
 - Avis : `id, restaurantId, auteurId, prenom, note, commentaire, creeLe, modifieLe`
-- Plafond : `departement, nom, plafond` · Favoris : Set d'ids · Profil : `id, email, prenom`
+- Plafond : `departement, nom, plafond` · Favoris : Set d'ids · Profil : `id, prenom` (email facultatif)
 
 ## Règles de code
 - Code et commentaires **en français**, commentaires simples.
@@ -110,7 +110,7 @@ src/
 - `GOOGLE_PLACES_API_KEY` **sans** `VITE_` → lue uniquement par `api/`, jamais envoyée au navigateur.
 - `api/` vérifie le jeton Supabase de l'utilisateur avant d'appeler Google.
 - Tous les comptes connectés partagent la gestion des propositions, des restaurants et des plafonds.
-- Option : table `domaines_autorises` pour réserver l'inscription aux emails `grtgaz.com`.
+- Les sessions anonymes doivent être activées dans Supabase (Authentication → Sign In / Providers).
 
 ## Google Places — conditions d'utilisation
 - Stocker le **`place_id`** ; téléphone/horaires/site/photo **relus en direct** (pas stockés).
@@ -121,7 +121,7 @@ src/
 - [x] Phase 1 : initialisation, CLAUDE.md, carte avec restaurants factices
 - [x] Phase 2 : recherche + filtres
 - [x] Phase 3 : fiche restaurant + design mobile
-- [x] Phase 4 : Supabase (schéma + RLS) + authentification par email
+- [x] Phase 4 : Supabase (schéma + RLS) + session invitée automatique
 - [x] Phase 5 : favoris, commentaires et notes
 - [x] Phase 6 : ajout via Google Places + saisie manuelle + contrôle du budget
 - [x] Phase 7 : réglages partagés, tests, guide de déploiement Vercel

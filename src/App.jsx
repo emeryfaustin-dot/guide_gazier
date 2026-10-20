@@ -6,7 +6,6 @@ import EnTete from './components/layout/EnTete.jsx'
 import { NavigationBas } from './components/layout/Navigation.jsx'
 import FicheRestaurant from './components/fiche/FicheRestaurant.jsx'
 import VueRestaurants from './pages/VueRestaurants.jsx'
-import PageConnexion from './pages/PageConnexion.jsx'
 import PageProfil from './pages/PageProfil.jsx'
 import PageAjout from './pages/PageAjout.jsx'
 import PageAdmin from './pages/PageAdmin.jsx'
@@ -24,7 +23,7 @@ export default function App() {
 }
 
 function Application() {
-  const { utilisateur, sessionVerifiee, erreur, recharger } = useDonnees()
+  const { utilisateur, sessionVerifiee, erreur, recharger, service } = useDonnees()
   const { page, id, derniereVue } = useRoute()
   // Les filtres sont gardés ici pour être conservés entre Carte et Liste.
   const [filtres, setFiltres] = useState(FILTRES_PAR_DEFAUT)
@@ -33,7 +32,16 @@ function Application() {
   if (!sessionVerifiee) {
     return <p className="flex h-dvh items-center justify-center text-gray-700">Chargement…</p>
   }
-  if (!utilisateur) return <PageConnexion />
+  if (!utilisateur) {
+    return (
+      <main className="flex h-dvh items-center justify-center p-4">
+        <Message type="erreur">
+          Impossible de démarrer la session invitée : {erreur || 'service indisponible'}.
+          {service.mode === 'supabase' && ' Vérifie que les connexions anonymes sont activées dans Supabase.'}
+        </Message>
+      </main>
+    )
+  }
 
   const pageAffichee = page
 
