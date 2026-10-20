@@ -69,7 +69,7 @@ export function NavigationHaut({ pageActive }) {
               href={l.href}
               aria-current={pageActive === l.page ? 'page' : undefined}
               className={`flex min-h-11 items-center gap-2 rounded-xl px-3 font-semibold ${
-                pageActive === l.page ? 'bg-gray-900 text-white' : 'text-gray-800 hover:bg-gray-100'
+                pageActive === l.page ? 'bg-natran-400 text-gray-950' : 'text-gray-100 hover:bg-gray-800'
               }`}
             >
               <Icone nom={l.icone} taille={18} />

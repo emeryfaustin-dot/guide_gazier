@@ -115,3 +115,8 @@ h2,
 .sans-barre::-webkit-scrollbar {
   display: none;
 }
+
+/* Sur l'en-tête foncé, le contour de focus passe au jaune vif pour rester visible. */
+header :focus-visible {
+  outline-color: var(--color-natran-400);
+}

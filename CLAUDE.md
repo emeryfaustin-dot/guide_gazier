@@ -43,7 +43,8 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 - Couleurs et polices déclarées UNE fois dans `src/index.css` (`@theme` Tailwind) :
   gris neutres (`gray-*` redéfini), `natran-*` = jaune NaTran (#fec52e) pour les actions, `ok` / `hors` = budget, `etoile`.
   Jaune trop clair pour du texte : boutons `bg-natran-400 text-gray-950`, liens/accents `text-natran-700`.
-- Logo : `public/logo.png` (flamme + couverts, fond transparent), affiché seul dans l’en-tête ; favicon `public/favicon.png`.
+- En-tête : bandeau presque noir (`bg-gray-900`), logo `public/logo.png` + « Le guide du Gazier » en `text-natran-400`
+  (le jaune vif n’est lisible que sur fond foncé) ; onglet actif jaune. Favicon `public/favicon.png`.
 - Polices : **Bricolage Grotesque** (titres, classe `font-display`) + **Figtree** (texte), chargées dans `index.html`.
 - Chaque cuisine a une couleur + un pictogramme : `STYLES_CUISINES` dans `src/config/cuisines.js`
   (utilisé par les pins, la liste, la fiche, la légende). Nouvelle cuisine → l'ajouter là.
