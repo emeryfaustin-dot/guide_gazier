@@ -2,9 +2,11 @@
 @import "tailwindcss";
 
 /*
-  Charte « bistrot de quartier » : toutes les couleurs et polices de l'app sont ici.
-  - On remplace le gris de Tailwind par un gris CHAUD (fond crème, texte presque noir).
-  - « tomate » = couleur d'action (boutons, liens).
+  Charte NaTran (ex-GRTgaz) : toutes les couleurs et polices de l'app sont ici.
+  - « natran » = jaune de la marque (#fec52e, natran-400) pour les actions.
+    Le jaune est trop clair pour du texte sur blanc : boutons jaunes = texte foncé,
+    liens et accents = natran-700 / 800 (jaune foncé lisible).
+  - « gray » = gris neutres (fond presque blanc, texte presque noir).
   - « ok » / « hors » = budget respecté / dépassé.
   - Une couleur par type de cuisine (voir aussi src/config/cuisines.js).
   Tous les couples texte / fond respectent le contraste AA (4,5:1).
@@ -13,29 +15,29 @@
   --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
 
-  --color-gray-50: #f7f4ef;
-  --color-gray-100: #efeae2;
-  --color-gray-200: #e6e0d6;
-  --color-gray-300: #d6cec1;
-  --color-gray-400: #ada597;
-  --color-gray-500: #777166;
-  --color-gray-600: #5e5a52;
-  --color-gray-700: #4a463f;
-  --color-gray-800: #2e2b27;
-  --color-gray-900: #1b1a17;
-  --color-gray-950: #0f0e0c;
+  --color-gray-50: #f6f6f4;
+  --color-gray-100: #ededea;
+  --color-gray-200: #e2e2de;
+  --color-gray-300: #cfcfca;
+  --color-gray-400: #a3a39d;
+  --color-gray-500: #73736d;
+  --color-gray-600: #5b5b56;
+  --color-gray-700: #474743;
+  --color-gray-800: #2d2d2a;
+  --color-gray-900: #1d1d1b;
+  --color-gray-950: #0f0f0e;
 
-  --color-tomate-50: #fdf1ee;
-  --color-tomate-100: #fbe0d9;
-  --color-tomate-200: #f6bfb2;
-  --color-tomate-300: #ef9784;
-  --color-tomate-400: #e66a51;
-  --color-tomate-500: #d8432a;
-  --color-tomate-600: #c23b22;
-  --color-tomate-700: #a8321c;
-  --color-tomate-800: #8a2916;
-  --color-tomate-900: #6e2112;
-  --color-tomate-950: #4a160c;
+  --color-natran-50: #fff8e5;
+  --color-natran-100: #ffefc2;
+  --color-natran-200: #ffe08a;
+  --color-natran-300: #fed25c;
+  --color-natran-400: #fec52e;
+  --color-natran-500: #e6a800;
+  --color-natran-600: #b88600;
+  --color-natran-700: #8a6200;
+  --color-natran-800: #7a5700;
+  --color-natran-900: #5c4100;
+  --color-natran-950: #3d2b00;
 
   --color-ok-fond: #e4f0e8;
   --color-ok: #245a3d;
@@ -77,14 +79,14 @@ h2,
 
 /* Contour bien visible quand on navigue au clavier (accessibilité). */
 :focus-visible {
-  outline: 3px solid var(--color-tomate-600);
+  outline: 3px solid var(--color-natran-700);
   outline-offset: 2px;
 }
 
-/* Carte : tuiles OpenStreetMap un peu désaturées et réchauffées,
+/* Carte : tuiles OpenStreetMap un peu désaturées,
    pour que les pins colorés ressortent. */
 .leaflet-tile-pane {
-  filter: saturate(0.55) sepia(0.12) brightness(1.03);
+  filter: saturate(0.5) brightness(1.03);
 }
 
 /* Bulles Leaflet : coins arrondis, ombre douce, police de l'app. */
@@ -98,7 +100,7 @@ h2,
 }
 .leaflet-container {
   font-family: var(--font-sans);
-  background: #efe9df;
+  background: #ecece8;
 }
 
 /* Ombre portée des pins (dessinés en SVG). */

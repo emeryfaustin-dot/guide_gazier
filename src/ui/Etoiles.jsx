@@ -30,7 +30,7 @@ export function EtoilesSaisie({ valeur, onChange, nom = 'note' }) {
               className="peer sr-only"
             />
             <span
-              className={`flex h-11 w-11 items-center justify-center rounded-lg text-3xl peer-focus-visible:outline-3 peer-focus-visible:outline-tomate-700 ${
+              className={`flex h-11 w-11 items-center justify-center rounded-lg text-3xl peer-focus-visible:outline-3 peer-focus-visible:outline-natran-700 ${
                 n <= valeur ? 'text-etoile' : 'text-gray-300'
               }`}
               aria-hidden="true"

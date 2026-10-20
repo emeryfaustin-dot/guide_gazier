@@ -17,7 +17,7 @@ export default function Notification() {
       {notification && (
         <p
           className={`pointer-events-auto max-w-md rounded-2xl px-4 py-3 text-center font-semibold shadow-lg ${
-            notification.type === 'erreur' ? 'bg-tomate-800 text-white' : 'bg-gray-900 text-white'
+            notification.type === 'erreur' ? 'bg-hors text-white' : 'bg-gray-900 text-white'
           }`}
         >
           {notification.texte}

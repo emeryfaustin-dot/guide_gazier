@@ -75,7 +75,7 @@ export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
 function CaseACocher({ libelle, coche, onChange }) {
   return (
     <label className="flex min-h-11 cursor-pointer items-center gap-3 text-gray-900">
-      <input type="checkbox" checked={coche} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-tomate-800" />
+      <input type="checkbox" checked={coche} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-natran-800" />
       {libelle}
     </label>
   )

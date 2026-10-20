@@ -25,7 +25,7 @@ export default function BoutonFavori({ restaurantId }) {
       disabled={enCours}
       aria-pressed={estFavori}
       className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-3 font-bold ${
-        estFavori ? 'bg-tomate-50 text-tomate-700' : 'bg-white/95 text-gray-900'
+        estFavori ? 'bg-natran-50 text-natran-700' : 'bg-white/95 text-gray-900'
       }`}
     >
       <Icone nom="coeur" taille={20} plein={estFavori} />

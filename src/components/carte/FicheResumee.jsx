@@ -34,7 +34,7 @@ export default function FicheResumee({ restaurant, plafonds, stats }) {
       {/* Un simple lien suffit : la navigation se fait par l'adresse "#/restaurant/…" */}
       <a
         href={`#/restaurant/${restaurant.id}`}
-        className="mt-3 flex min-h-11 items-center justify-center rounded-xl bg-tomate-600 font-bold !text-white no-underline hover:bg-tomate-700"
+        className="mt-3 flex min-h-11 items-center justify-center rounded-xl bg-natran-400 font-bold !text-gray-950 no-underline hover:bg-natran-500"
       >
         Voir la fiche
       </a>

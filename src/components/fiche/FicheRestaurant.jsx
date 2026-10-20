@@ -122,7 +122,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
                   href={`https://www.google.com/maps/dir/?api=1&destination=${restaurant.lat},${restaurant.lng}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-tomate-600 text-sm font-bold text-white hover:bg-tomate-700"
+                  className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-natran-400 text-sm font-bold text-gray-950 hover:bg-natran-500"
                 >
                   <Icone nom="itineraire" taille={20} epaisseur={2.2} />Y aller
                 </a>

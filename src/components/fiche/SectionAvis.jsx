@@ -48,7 +48,7 @@ export default function SectionAvis({ restaurantId }) {
             const estLeMien = a.auteurId === utilisateur.id
             const peutSupprimer = estLeMien
             return (
-              <li key={a.id} className={`rounded-xl border p-4 ${estLeMien ? 'border-tomate-300 bg-tomate-50' : 'border-gray-200 bg-white'}`}>
+              <li key={a.id} className={`rounded-xl border p-4 ${estLeMien ? 'border-natran-300 bg-natran-50' : 'border-gray-200 bg-white'}`}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <p className="font-bold text-gray-900">
                     {a.prenom || 'Collègue'}

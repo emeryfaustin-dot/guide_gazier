@@ -6,7 +6,7 @@ import Message from '../ui/Message.jsx'
 import Icone from '../ui/Icone.jsx'
 
 const RAYONS = [2, 5, 10, 20, 50, 100]
-const COULEURS = ['#d8432a', '#245a3d', '#1d6f86', '#e0a21b', '#7a2638', '#4a463f']
+const COULEURS = ['#fec52e', '#245a3d', '#1d6f86', '#1d1d1b', '#7a2638', '#e6a800']
 
 export default function PageRoulette() {
   const { restaurants } = useDonnees()
@@ -79,7 +79,7 @@ export default function PageRoulette() {
     <main className="mx-auto grid w-full max-w-5xl gap-8 overflow-y-auto p-5 pb-28 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.85fr)] md:items-center md:px-8 md:py-10">
       <section className="space-y-6">
         <div className="space-y-2">
-          <p className="text-sm font-bold uppercase tracking-[0.12em] text-tomate-700">Une bonne adresse, au hasard</p>
+          <p className="text-sm font-bold uppercase tracking-[0.12em] text-natran-700">Une bonne adresse, au hasard</p>
           <h1 className="font-display text-4xl font-extrabold text-gray-950">La roulette du déjeuner</h1>
           <p className="max-w-xl text-gray-700">Laisse le sort choisir parmi les restaurants validés autour de toi.</p>
         </div>
@@ -124,7 +124,7 @@ export default function PageRoulette() {
           <span className="absolute -top-1 z-10 border-x-[14px] border-t-[25px] border-x-transparent border-t-gray-950 drop-shadow" aria-hidden="true" />
           <div
             className={`relative flex aspect-square w-full items-center justify-center rounded-full border-[10px] border-white shadow-[0_16px_45px_rgb(27_26_23/0.18)] ${enCours ? 'transition-transform duration-[2600ms] [transition-timing-function:cubic-bezier(.12,.72,.08,1)]' : ''}`}
-            style={{ background: proches.length ? `conic-gradient(${tranches})` : 'repeating-conic-gradient(#e6e0d6 0deg 15deg, #f7f4ef 15deg 30deg)', transform: `rotate(${rotation}deg)` }}
+            style={{ background: proches.length ? `conic-gradient(${tranches})` : 'repeating-conic-gradient(#e2e2de 0deg 15deg, #f6f6f4 15deg 30deg)', transform: `rotate(${rotation}deg)` }}
             aria-hidden="true"
           >
             <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gray-950 text-white shadow-lg">
@@ -136,7 +136,7 @@ export default function PageRoulette() {
           {tirage && !enCours ? (
             <>
               <p className="text-sm font-bold uppercase tracking-[0.1em] text-ok">C’est décidé</p>
-              <a href={`#/restaurant/${tirage.id}`} className="mt-1 block font-display text-2xl font-extrabold text-gray-950 underline decoration-tomate-500 decoration-2 underline-offset-4">
+              <a href={`#/restaurant/${tirage.id}`} className="mt-1 block font-display text-2xl font-extrabold text-gray-950 underline decoration-natran-400 decoration-2 underline-offset-4">
                 {tirage.nom}
               </a>
               <p className="mt-1 text-gray-700">{tirage.ville} · {tirage.distanceKm.toFixed(1).replace('.', ',')} km</p>

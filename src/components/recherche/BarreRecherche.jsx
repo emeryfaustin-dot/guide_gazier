@@ -46,7 +46,7 @@ export default function BarreRecherche({ filtres, setFiltres, nombreResultats })
         >
           <Icone nom={filtresOuverts ? 'fermer' : 'filtres'} taille={20} />
           {nbActifs > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-tomate-600 px-1 text-xs font-bold text-white">
+            <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-natran-400 px-1 text-xs font-bold text-gray-950">
               {nbActifs}
             </span>
           )}

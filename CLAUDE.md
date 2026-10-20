@@ -39,9 +39,11 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 10. Réglages partagés : valider/refuser les propositions, gérer les plafonds, retirer/supprimer des restaurants.
 11. Roulette : tirage au sort d'un restaurant publié dans le rayon GPS choisi.
 
-## Charte visuelle (« bistrot de quartier »)
+## Charte visuelle (NaTran, ex-GRTgaz)
 - Couleurs et polices déclarées UNE fois dans `src/index.css` (`@theme` Tailwind) :
-  gris chaud (`gray-*` redéfini), `tomate-*` = actions, `ok` / `hors` = budget, `etoile`.
+  gris neutres (`gray-*` redéfini), `natran-*` = jaune NaTran (#fec52e) pour les actions, `ok` / `hors` = budget, `etoile`.
+  Jaune trop clair pour du texte : boutons `bg-natran-400 text-gray-950`, liens/accents `text-natran-700`.
+- Logo : `public/logo.png` (flamme + couverts, fond transparent), affiché seul dans l’en-tête ; favicon `public/favicon.png`.
 - Polices : **Bricolage Grotesque** (titres, classe `font-display`) + **Figtree** (texte), chargées dans `index.html`.
 - Chaque cuisine a une couleur + un pictogramme : `STYLES_CUISINES` dans `src/config/cuisines.js`
   (utilisé par les pins, la liste, la fiche, la légende). Nouvelle cuisine → l'ajouter là.

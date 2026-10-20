@@ -46,7 +46,7 @@ export function NavigationBas({ pageActive }) {
                   actif ? 'font-bold text-gray-900' : 'font-semibold text-gray-600'
                 }`}
               >
-                <span className={actif ? 'text-tomate-600' : ''}>
+                <span className={actif ? 'text-natran-700' : ''}>
                   <Icone nom={l.icone} taille={24} epaisseur={actif ? 2.3 : 2} />
                 </span>
                 {l.texte}

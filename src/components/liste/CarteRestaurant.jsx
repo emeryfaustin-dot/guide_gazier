@@ -20,7 +20,7 @@ export default function CarteRestaurant({ restaurant, plafonds, stats, estFavori
         <div className="flex items-start justify-between gap-2">
           <h2 className="text-lg leading-tight font-bold text-gray-900">{restaurant.nom}</h2>
           {estFavori && (
-            <span className="text-tomate-600" title="Favori">
+            <span className="text-natran-700" title="Favori">
               <Icone nom="coeur" taille={18} plein />
               <span className="sr-only">Dans mes favoris</span>
             </span>
