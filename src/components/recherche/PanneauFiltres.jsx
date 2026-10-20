@@ -4,7 +4,7 @@ import { FILTRES_PAR_DEFAUT } from '../../utils/filtres.js'
 import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 import { bouton } from '../../ui/styles.js'
 
-// Panneau des filtres : cuisine, département, budget, note, favoris.
+// Panneau des filtres : cuisine, département, budget, note, favoris, halal.
 // Les listes déroulantes stockent du texte ; on convertit en nombre quand il faut.
 export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
   const { plafonds, cuisines } = useDonnees()
@@ -56,6 +56,11 @@ export default function PanneauFiltres({ filtres, setFiltres, onFermer }) {
           libelle="Mes favoris uniquement"
           coche={filtres.favorisSeulement}
           onChange={(v) => maj('favorisSeulement', v)}
+        />
+        <CaseACocher
+          libelle="Halal uniquement"
+          coche={filtres.halalSeulement}
+          onChange={(v) => maj('halalSeulement', v)}
         />
       </div>
 

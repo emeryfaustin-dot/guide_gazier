@@ -29,14 +29,14 @@ Propriétaire : Faustin (débutant en développement → expliquer simplement).
 ## Fonctionnalités (toutes livrées)
 1. Carte Leaflet + OpenStreetMap, pins colorés par cuisine (+ pastille « ! » si hors budget), popup → « Voir la fiche ».
 2. Recherche (nom, ville, cuisine ; sans accents, multi-mots).
-3. Filtres : cuisine, département, prix max, « dans le plafond », note minimale, favoris.
+3. Filtres : cuisine, département, prix max, « dans le plafond », note minimale, favoris, halal (taper « halal » dans la recherche marche aussi).
 4. Vue Liste (triée par note).
 5. Fiche : infos, itinéraire, téléphone cliquable, horaires, site, note moyenne, avis, photo Google.
 6. Favoris par collègue.
 7. Avis 1–5 + commentaire (prénom + date), un par personne et par restaurant, modifiable / supprimable.
 8. Ajout : recherche Google Places (nom ou lien Google Maps) ou saisie manuelle + géocodage Nominatim.
 9. Contrôle du budget à l'ajout (refus si dépassé). Chaque ajout est proposé « en attente », puis validé collectivement.
-10. Réglages partagés : valider/refuser les propositions, gérer les plafonds, retirer/supprimer des restaurants.
+10. Réglages partagés : valider/refuser les propositions, gérer les plafonds, cocher « halal », retirer/supprimer des restaurants.
 11. Roulette : tirage au sort d'un restaurant publié dans le rayon GPS choisi.
 
 ## Charte visuelle (NaTran, ex-GRTgaz)
@@ -97,7 +97,7 @@ src/
 
 ## Modèle de données (côté app, camelCase)
 - Restaurant : `id, nom, adresse, ville, codePostal, departement, cuisine, prixMoyen, telephone, horaires,
-  siteWeb, lat, lng, placeId, statut, proposePar, creeLe` (base en snake_case, conversion dans serviceSupabase)
+  siteWeb, lat, lng, placeId, halal, statut, proposePar, creeLe` (base en snake_case, conversion dans serviceSupabase)
 - Avis : `id, restaurantId, auteurId, prenom, note, commentaire, creeLe, modifieLe`
 - Plafond : `departement, nom, plafond` · Favoris : Set d'ids · Profil : `id, prenom` (email facultatif)
 
@@ -132,6 +132,7 @@ src/
 - [x] Phase 6 : ajout via Google Places + saisie manuelle + contrôle du budget
 - [x] Phase 7 : réglages partagés, tests, guide de déploiement Vercel
 - [x] Phase 8 : roulette géolocalisée et suppression du rôle administrateur
+- [x] Phase 9 : charte NaTran, PWA installable, badge et filtre « Halal » (migration `20261021_halal.sql`)
 
 ## Pistes d'amélioration
 - Bouton « Rafraîchir depuis Google » dans les réglages (adresse/coordonnées des restaurants avec place_id).

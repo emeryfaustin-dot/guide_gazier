@@ -12,6 +12,7 @@ export const FILTRES_PAR_DEFAUT = {
   dansLePlafond: false, // true = seulement les restaurants "validés budget"
   noteMin: null, // null = toutes les notes
   favorisSeulement: false,
+  halalSeulement: false, // true = seulement les restaurants halal
 }
 
 /**
@@ -26,11 +27,11 @@ export function normaliser(texte) {
     .trim()
 }
 
-/** Le restaurant correspond-il au texte recherché (nom, ville ou cuisine) ? */
+/** Le restaurant correspond-il au texte recherché (nom, ville, cuisine, ou « halal ») ? */
 export function correspondAuTexte(restaurant, texte) {
   const recherche = normaliser(texte)
   if (!recherche) return true
-  const cible = normaliser(`${restaurant.nom} ${restaurant.ville} ${restaurant.cuisine}`)
+  const cible = normaliser(`${restaurant.nom} ${restaurant.ville} ${restaurant.cuisine} ${restaurant.halal ? 'halal' : ''}`)
   // Tous les mots tapés doivent être présents : "pizza meaux" fonctionne.
   return recherche.split(/\s+/).every((mot) => cible.includes(mot))
 }
@@ -53,6 +54,7 @@ export function filtrerRestaurants(restaurants, filtres, { plafonds, stats = {},
       if (moyenne == null || moyenne < filtres.noteMin) return false
     }
     if (filtres.favorisSeulement && !favoris.has(r.id)) return false
+    if (filtres.halalSeulement && !r.halal) return false
     return true
   })
 }
@@ -66,5 +68,6 @@ export function compterFiltresActifs(filtres) {
   if (filtres.dansLePlafond) n++
   if (filtres.noteMin != null) n++
   if (filtres.favorisSeulement) n++
+  if (filtres.halalSeulement) n++
   return n
 }

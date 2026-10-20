@@ -2,6 +2,7 @@ import { estDansLeBudget } from '../../utils/budget.js'
 import { formaterNote } from '../../utils/notes.js'
 import Icone, { IconeEtoile, VignetteCuisine } from '../../ui/Icone.jsx'
 import { useDonnees } from '../../contexte/DonneesContexte.jsx'
+import BadgeHalal from '../../ui/BadgeHalal.jsx'
 
 // Une "carte" (vignette) de restaurant dans la vue Liste.
 // Toute la vignette est un lien : grande zone facile à toucher sur mobile.
@@ -42,6 +43,7 @@ export default function CarteRestaurant({ restaurant, plafonds, stats, estFavori
           >
             ~{restaurant.prixMoyen} € · {valide ? 'OK' : 'hors budget'}
           </span>
+          {restaurant.halal && <BadgeHalal />}
         </div>
       </div>
     </a>

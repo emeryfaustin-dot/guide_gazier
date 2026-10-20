@@ -65,6 +65,7 @@ create table if not exists public.restaurants (
   lat          double precision not null,
   lng          double precision not null,
   place_id     text unique,        -- identifiant Google Places (peut être conservé)
+  halal        boolean not null default false,
   statut       text not null default 'en_attente' check (statut in ('en_attente', 'valide', 'refuse')),
   propose_par  uuid references public.profils (id) on delete set null,
   cree_le      timestamptz not null default now()

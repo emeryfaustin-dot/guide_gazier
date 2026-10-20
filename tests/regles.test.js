@@ -19,7 +19,7 @@ const plafonds = [
 const restaurants = [
   { id: 1, nom: 'Le Relais', ville: 'Lamorlaye', cuisine: 'Français', departement: '60', prixMoyen: 28 },
   { id: 2, nom: 'Le Grand Cerf', ville: 'Compiègne', cuisine: 'Français', departement: '60', prixMoyen: 48 },
-  { id: 3, nom: 'O Cantinho', ville: 'Villemomble', cuisine: 'Portugais', departement: '93', prixMoyen: 19 },
+  { id: 3, nom: 'O Cantinho', ville: 'Villemomble', cuisine: 'Portugais', departement: '93', prixMoyen: 19, halal: true },
   { id: 4, nom: 'Sans plafond', ville: 'Lyon', cuisine: 'Autre', departement: '69', prixMoyen: 10 },
 ]
 
@@ -90,6 +90,12 @@ describe('Recherche et filtres', () => {
   it('filtre par note minimale et par favoris', () => {
     expect(filtrer({ noteMin: 4 })).toEqual([1])
     expect(filtrer({ favorisSeulement: true })).toEqual([3])
+  })
+
+  it('filtre les restaurants halal (case à cocher ou recherche « halal »)', () => {
+    expect(filtrer({ halalSeulement: true })).toEqual([3])
+    expect(filtrer({ texte: 'halal' })).toEqual([3])
+    expect(compterFiltresActifs({ ...FILTRES_PAR_DEFAUT, halalSeulement: true })).toBe(1)
   })
 
   it('compte les filtres actifs', () => {

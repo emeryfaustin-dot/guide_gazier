@@ -132,6 +132,7 @@ export const serviceDemo = {
 
     const nouveau = {
       ...r,
+      halal: Boolean(r.halal),
       id: Math.max(0, ...base.restaurants.map((x) => Number(x.id) || 0)) + 1,
       statut: 'en_attente',
       proposePar: utilisateur.id,
@@ -145,6 +146,12 @@ export const serviceDemo = {
   async changerStatutRestaurant(_utilisateur, id, statut) {
     const r = base.restaurants.find((x) => x.id === id)
     if (r) r.statut = statut
+    sauver()
+  },
+
+  async changerHalalRestaurant(_utilisateur, id, halal) {
+    const r = base.restaurants.find((x) => x.id === id)
+    if (r) r.halal = halal
     sauver()
   },
 

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDonnees } from '../../contexte/DonneesContexte.jsx'
 import { useDetailsGoogle } from '../../hooks/useDetailsGoogle.js'
 import BadgeBudget from '../../ui/BadgeBudget.jsx'
+import BadgeHalal from '../../ui/BadgeHalal.jsx'
 import { EtoilesAffichage } from '../../ui/Etoiles.jsx'
 import Message from '../../ui/Message.jsx'
 import BoutonFavori from './BoutonFavori.jsx'
@@ -94,6 +95,7 @@ export default function FicheRestaurant({ restaurantId, onFermer }) {
                     <VignetteCuisine cuisine={restaurant.cuisine} cuisines={cuisines} taille={20} arrondi={7} />
                     {restaurant.cuisine}
                   </span>
+                  {restaurant.halal && <BadgeHalal />}
                   <span className="text-sm text-gray-600">
                     {restaurant.ville} ({restaurant.departement})
                   </span>

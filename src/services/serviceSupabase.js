@@ -23,6 +23,7 @@ function versRestaurant(ligne) {
     lat: ligne.lat,
     lng: ligne.lng,
     placeId: ligne.place_id,
+    halal: Boolean(ligne.halal),
     statut: ligne.statut,
     proposePar: ligne.propose_par,
     creeLe: ligne.cree_le,
@@ -164,6 +165,7 @@ export const serviceSupabase = {
           lat: r.lat,
           lng: r.lng,
           place_id: r.placeId || null,
+          halal: Boolean(r.halal),
           statut: 'en_attente',
           propose_par: utilisateur.id,
         })
@@ -175,6 +177,10 @@ export const serviceSupabase = {
 
   async changerStatutRestaurant(_utilisateur, id, statut) {
     verifier(await supabase.from('restaurants').update({ statut }).eq('id', id))
+  },
+
+  async changerHalalRestaurant(_utilisateur, id, halal) {
+    verifier(await supabase.from('restaurants').update({ halal }).eq('id', id))
   },
 
   async supprimerRestaurant(_utilisateur, id) {

@@ -45,6 +45,8 @@ Après le déploiement de la nouvelle version, ouvre **SQL Editor** et exécute 
 Exécute ensuite `supabase/migrations/20261021_types_cuisine.sql` pour ajouter la gestion partagée
 des types de restaurant, leurs couleurs et leurs pictogrammes. Les réglages se font dans
 **Réglages → Types et logos**; seules les icônes proposées par l'application sont disponibles.
+Enfin, exécute `supabase/migrations/20261021_halal.sql` pour ajouter le badge « Halal »
+(à cocher à l'ajout ou dans **Réglages → Restaurants**).
 
 ---
 

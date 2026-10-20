@@ -28,6 +28,7 @@ export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
     lat: initial?.lat ?? null,
     lng: initial?.lng ?? null,
     placeId: initial?.placeId ?? null,
+    halal: false,
   })
   const [localisation, setLocalisation] = useState({ enCours: false, erreur: '' })
   const [enCours, setEnCours] = useState(false)
@@ -124,6 +125,11 @@ export default function FormulaireRestaurant({ initial, onRetour, onAjoute }) {
         step="0.5"
         inputMode="decimal"
       />
+
+      <label className="flex min-h-11 cursor-pointer items-center gap-3 font-semibold text-gray-900">
+        <input type="checkbox" checked={r.halal} onChange={(e) => maj('halal', e.target.checked)} className="h-5 w-5 accent-natran-800" />
+        Restaurant halal
+      </label>
 
       {/* Contrôle du budget en direct */}
       {r.prixMoyen && departement && <Message type={budget.ok ? 'succes' : 'erreur'}>{budget.message}</Message>}

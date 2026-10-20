@@ -1,4 +1,5 @@
 import BadgeBudget from '../../ui/BadgeBudget.jsx'
+import BadgeHalal from '../../ui/BadgeHalal.jsx'
 import { IconeEtoile, VignetteCuisine } from '../../ui/Icone.jsx'
 import { styleCuisine } from '../../config/cuisines.js'
 import { formaterNote } from '../../utils/notes.js'
@@ -29,6 +30,7 @@ export default function FicheResumee({ restaurant, plafonds, stats }) {
 
       <div className="mt-3 flex items-center gap-2">
         <BadgeBudget restaurant={restaurant} plafonds={plafonds} compact />
+        {restaurant.halal && <BadgeHalal />}
       </div>
 
       {/* Un simple lien suffit : la navigation se fait par l'adresse "#/restaurant/…" */}
