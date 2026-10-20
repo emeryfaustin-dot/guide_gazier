@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import { AttributionControl, MapContainer, TileLayer, useMap } from 'react-leaflet'
 import MarqueurRestaurant from './MarqueurRestaurant.jsx'
 
 // Centre par défaut (Île-de-France / Oise) si aucun restaurant n'est affiché.
@@ -17,10 +17,12 @@ export default function Carte({ restaurants, plafonds, stats }) {
       zoomSnap={0.5} // autorise les demi-niveaux de zoom : cadrage plus précis
       className="h-full w-full"
       aria-label="Carte des restaurants"
+      attributionControl={false} // remplacé ci-dessous, sans le préfixe « Leaflet » + drapeau
     >
+      <AttributionControl prefix={false} />
       <TileLayer
-        // Mention obligatoire selon la licence OpenStreetMap
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">contributeurs OpenStreetMap</a>'
+        // Mention obligatoire selon la licence OpenStreetMap (on ne peut pas la retirer)
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 

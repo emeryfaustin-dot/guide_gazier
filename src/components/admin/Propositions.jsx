@@ -13,7 +13,7 @@ export default function Propositions() {
       statut === 'valide' ? `${r.nom} est publié` : `${r.nom} est refusé`,
     )
 
-  if (!enAttente.length) return <p className="text-gray-700">Aucune proposition en attente. 👍</p>
+  if (!enAttente.length) return <p className="text-gray-700">Aucune proposition en attente.</p>
 
   return (
     <ul className="space-y-3">

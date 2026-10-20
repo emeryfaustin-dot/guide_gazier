@@ -17,9 +17,10 @@ function liens() {
   ]
 }
 
+// z-[1100] : au-dessus de la carte Leaflet (z-index jusqu'à 1000), sous la fiche (1500).
 export function NavigationBas({ pageActive }) {
   return (
-    <nav aria-label="Navigation principale" className="border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
+    <nav aria-label="Navigation principale" className="relative z-[1100] border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
       <ul className="flex items-end">
         {liens().filter((l) => !l.horsBarreBas).map((l) => {
           const actif = pageActive === l.page

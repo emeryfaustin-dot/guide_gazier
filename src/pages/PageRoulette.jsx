@@ -76,7 +76,7 @@ export default function PageRoulette() {
   }[localisation]
 
   return (
-    <main className="mx-auto grid w-full max-w-5xl gap-8 overflow-y-auto p-5 pb-28 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.85fr)] md:items-center md:px-8 md:py-10">
+    <main className="mx-auto grid w-full max-w-5xl gap-8 p-5 pb-28 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.85fr)] md:items-center md:px-8 md:py-10">
       <section className="space-y-6">
         <div className="space-y-2">
           <p className="text-sm font-bold uppercase tracking-[0.12em] text-natran-700">Une bonne adresse, au hasard</p>
@@ -119,8 +119,9 @@ export default function PageRoulette() {
         </button>
       </section>
 
-      <section className="flex min-h-80 flex-col items-center justify-center gap-6" aria-label="Résultat du tirage">
-        <div className="relative flex aspect-square w-full max-w-[20rem] items-center justify-center">
+      {/* justify-center seulement sur grand écran : sur téléphone, une roue centrée débordait sur le bouton */}
+      <section className="flex flex-col items-center gap-6 md:min-h-80 md:justify-center" aria-label="Résultat du tirage">
+        <div className="relative flex aspect-square w-full max-w-[20rem] shrink-0 items-center justify-center">
           <span className="absolute -top-1 z-10 border-x-[14px] border-t-[25px] border-x-transparent border-t-gray-950 drop-shadow" aria-hidden="true" />
           <div
             className={`relative flex aspect-square w-full items-center justify-center rounded-full border-[10px] border-white shadow-[0_16px_45px_rgb(27_26_23/0.18)] ${enCours ? 'transition-transform duration-[2600ms] [transition-timing-function:cubic-bezier(.12,.72,.08,1)]' : ''}`}

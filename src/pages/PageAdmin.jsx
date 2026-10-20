@@ -18,12 +18,13 @@ export default function PageAdmin() {
     { id: 'cuisines', texte: 'Types et logos' },
   ]
 
+  // w-full sur <main> : sans lui, la page s'élargissait à la taille des onglets (défilement horizontal)
   return (
-    <main className="mx-auto max-w-3xl space-y-4 p-4 pb-24">
+    <main className="mx-auto w-full max-w-3xl space-y-4 p-4 pb-24">
       <h1 className="text-2xl font-bold text-gray-900">Réglages partagés</h1>
 
-      {/* Onglets accessibles (role="tablist") */}
-      <div role="tablist" aria-label="Sections des réglages" className="flex gap-1 overflow-x-auto border-b border-gray-300">
+      {/* Onglets accessibles (role="tablist") : 2 colonnes sur téléphone, une ligne sur grand écran */}
+      <div role="tablist" aria-label="Sections des réglages" className="grid grid-cols-2 gap-x-1 border-b border-gray-300 sm:flex">
         {onglets.map((o) => (
           <button
             key={o.id}
